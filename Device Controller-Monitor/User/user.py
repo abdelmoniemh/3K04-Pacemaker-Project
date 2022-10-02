@@ -24,6 +24,7 @@ class user():
             if (self.instanceCount + 1 > 10):     
                 raise ValueError #too many users to create a new one, catch and handle in gui code
             else:
+                self.instanceCount += 1
                 self.serialize()
         else:
             self.deserialize(username, password)
@@ -67,6 +68,7 @@ class user():
                 self.__dict__[attr] = userAttributes[attr]
             if not sha256_crypt.verify(password, self.password):
                 raise KeyError #wrong password, catch and retry on gui side
+        instanceCount = len(os.listdir(self.appUserDirectory))
             
     # define a bunch of get/set methods to be used by gui
 
