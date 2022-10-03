@@ -4,11 +4,11 @@ import json
 import os
 
 #if on linux or macos make sure "TMPDIR" env variable is set
-os.environ["TMPDIR"] = "/home/tempdir" #for linux
+#os.environ["TMPDIR"] = "/home/tempdir" #for linux
 class user():
-    appUserDirectory = os.environ["TMP"] +"\\3K04-GROUP32-tmp-directory\\users" if os.name=="Windows" \
+    appUserDirectory = os.environ["TMP"] +"\\3K04-GROUP32-tmp-directory\\users" if os.name=="nt" \
             else os.environ["TMPDIR"] + "/3K04-GROUP32-tmp-directory/users"
-
+    print(appUserDirectory)
     # get instanceCount from user directory/db
     if not os.path.exists(appUserDirectory):
             os.makedirs(appUserDirectory)
@@ -69,6 +69,9 @@ class user():
             if not sha256_crypt.verify(password, self.password):
                 raise KeyError #wrong password, catch and retry on gui side
         instanceCount = len(os.listdir(self.appUserDirectory))
+
+    def getAllAttributes(self):
+        return self.__dict__.items()
             
     # define a bunch of get/set methods to be used by gui
 
