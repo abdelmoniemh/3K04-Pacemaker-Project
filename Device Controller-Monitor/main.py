@@ -1,11 +1,11 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QLineEdit, QPushButton, QStackedWidget
 #import PyQt6.QtCore as Qt
 
 import User.user as User
 
-class DeviceControllerMonitor(QWidget):
+class loginScreen(QWidget):
     def __init__(self):
         super().__init__()
         self.WIDTH = 500
@@ -37,61 +37,43 @@ class DeviceControllerMonitor(QWidget):
 
             if self.user:
                 #Created user succesfully
-                super(loggedInScreen(self.user)).__init__()
-
+                #switch to logged in screen
+                print("created user")
+                #super(DeviceControllerMonitor, self)
+                DeviceControllerMonitor.setUser(self.user)
+                SceneManager.setCurrentIndex(SceneManager.currentIndex() + 1)
             else:
                 pass
 
 
         button.clicked.connect(createUser)
 
-class loggedInScreen(QWidget):
+class DeviceControllerMonitor(QWidget):
 
-    def __init__(self, user):
+    def __init__(self):
         super().__init__()
-        self.user = user
-        self.loggedIn = True
+        self.loggedIn = False
         self.layout = QVBoxLayout()
+        print("Set Layout")
+        self.setLayout(self.layout)
+    def setUser(self, user):
+        self.loggedIn = True
+        self.user = user
         attributes = self.user.getAllAttributes()
         for attr, value in attributes:
             self.layout.addWidget(QLabel(f"<h1>{attr}: {value}</h1>"))
         self.setLayout(self.layout)
-        print("Set Layout")
-        self.show()
 
 
 app = QApplication([])
-window = DeviceControllerMonitor()
-window.show()
+SceneManager = QStackedWidget()
+loginScreen = loginScreen()
+DeviceControllerMonitor = DeviceControllerMonitor()
+
+SceneManager.addWidget(loginScreen)
+SceneManager.addWidget(DeviceControllerMonitor)
+SceneManager.show()
 sys.exit(app.exec())
 
 
 
-
-"""
-window = QWidget()
-window.setWindowTitle("Device Controller Manager")
-window.setGeometry(400, 400, 280, 80)
-
-
-usernameFeild = QLineEdit()
-
-
-
-layout = QVBoxLayout()
-usernameFeild.setFixedWidth(150)
-layout.addWidget(usernameFeild)
-
-button = QPushButton("Submit")
-def outputUser():
-    print(usernameFeild.text())
-
-button.clicked.connect(outputUser)
-
-layout.addWidget(button)
-
-window.show()
-window.setLayout(layout)
-# 5. Run your application's event loop
-sys.exit(app.exec())
-"""
