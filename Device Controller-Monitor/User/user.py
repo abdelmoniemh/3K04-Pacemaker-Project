@@ -21,7 +21,7 @@ class user():
         self.appUserDirectory += self.subDirectory
         userPath = os.path.join(self.appUserDirectory, f"{username}.json")
         if (not os.path.exists(userPath)):       
-            if (self.instanceCount + 1 > 10):     
+            if (self.instanceCount + 1 > 10):
                 raise ValueError #too many users to create a new one, catch and handle in gui code
             else:
                 self.instanceCount += 1
@@ -32,8 +32,6 @@ class user():
     def createAttributes(self, username, password):
         self.username = username
         self.password = sha256_crypt.hash(password)
-        self.instanceCount += 1
-        
         
         # initialize programmable parameters
         # TODO: add rest of programmable parameters and their getters/setters
@@ -68,7 +66,7 @@ class user():
                 self.__dict__[attr] = userAttributes[attr]
             if not sha256_crypt.verify(password, self.password):
                 raise KeyError #wrong password, catch and retry on gui side
-        instanceCount = len(os.listdir(self.appUserDirectory))
+        self.instanceCount = len(os.listdir(self.appUserDirectory))
 
     def getAllAttributes(self):
         return self.__dict__.items()

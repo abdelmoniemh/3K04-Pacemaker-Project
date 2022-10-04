@@ -43,7 +43,8 @@ class loginScreen(QWidget):
                 DeviceControllerMonitor.setUser(self.user)
                 SceneManager.setCurrentIndex(SceneManager.currentIndex() + 1)
             else:
-                pass
+                print("here")
+                self.welcomeScene()
 
 
         button.clicked.connect(createUser)
