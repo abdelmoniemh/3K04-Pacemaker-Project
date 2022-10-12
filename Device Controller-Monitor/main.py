@@ -1,6 +1,6 @@
 import sys
 
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QLineEdit, QPushButton, QStackedWidget
+from PyQt5.QtWidgets import *
 #import PyQt6.QtCore as Qt
 
 import User.user as User
@@ -39,13 +39,11 @@ class loginScreen(QWidget):
                 #Created user succesfully
                 #switch to logged in screen
                 print("created user")
-                #super(DeviceControllerMonitor, self)
                 DeviceControllerMonitor.setUser(self.user)
                 SceneManager.setCurrentIndex(SceneManager.currentIndex() + 1)
             else:
                 print("here")
                 self.welcomeScene()
-
 
         button.clicked.connect(createUser)
 
@@ -61,6 +59,7 @@ class DeviceControllerMonitor(QWidget):
         self.loggedIn = True
         self.user = user
         attributes = self.user.getAllAttributes()
+        self.
         for attr, value in attributes:
             self.layout.addWidget(QLabel(f"<h1>{attr}: {value}</h1>"))
         self.setLayout(self.layout)

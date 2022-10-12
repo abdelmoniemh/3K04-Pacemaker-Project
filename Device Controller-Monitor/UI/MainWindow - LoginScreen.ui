@@ -16,6 +16,9 @@
   <property name="toolTipDuration">
    <number>2</number>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow#MainWindow{background-color:rgb(239, 247, 255)}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
     <size>
@@ -39,27 +42,8 @@
      </size>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="usernameFeild">
-       <property name="minimumSize">
-        <size>
-         <width>299</width>
-         <height>21</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;username&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="whatsThis">
-        <string>username</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
      <item row="4" column="1">
-      <widget class="QLineEdit" name="passwordFeild">
+      <widget class="QLineEdit" name="passwordField">
        <property name="minimumSize">
         <size>
          <width>299</width>
@@ -93,16 +77,61 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="1" alignment="Qt::AlignHCenter">
-      <widget class="QLabel" name="mainHeader">
+     <item row="6" column="1">
+      <widget class="QLabel" name="errorLabel">
        <property name="minimumSize">
         <size>
-         <width>174</width>
+         <width>299</width>
          <height>75</height>
         </size>
        </property>
        <property name="text">
-        <string>DEVICE CONTROLLER MANAGER</string>
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" alignment="Qt::AlignHCenter">
+      <widget class="QPushButton" name="loginButton">
+       <property name="minimumSize">
+        <size>
+         <width>93</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Log In | Sign Up</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="Line" name="dividerLine">
+       <property name="minimumSize">
+        <size>
+         <width>299</width>
+         <height>3</height>
+        </size>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="usernameField">
+       <property name="minimumSize">
+        <size>
+         <width>299</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;username&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="whatsThis">
+        <string>username</string>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </item>
@@ -125,42 +154,16 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="1">
-      <widget class="Line" name="dividerLine">
+     <item row="1" column="1" alignment="Qt::AlignHCenter">
+      <widget class="QLabel" name="mainHeader">
        <property name="minimumSize">
         <size>
-         <width>299</width>
-         <height>3</height>
-        </size>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1" alignment="Qt::AlignHCenter">
-      <widget class="QPushButton" name="loginButton">
-       <property name="minimumSize">
-        <size>
-         <width>93</width>
-         <height>24</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Log In | Sign Up</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="errorLabel">
-       <property name="minimumSize">
-        <size>
-         <width>299</width>
+         <width>174</width>
          <height>75</height>
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string>DEVICE CONTROLLER MANAGER</string>
        </property>
       </widget>
      </item>
