@@ -10,6 +10,7 @@ class loginScreen(QMainWindow):
     def __init__(self):
         super().__init__()
         loadUi(os.path.join("UI", "MainWindow - LoginScreen.ui"), self)
+        self.passwordField.setEchoMode(QLineEdit.Password)
         self.setFixedSize(1500, 800)
         def createUser():
             username = self.usernameField.text()
@@ -34,17 +35,18 @@ class loginScreen(QMainWindow):
             if self.user:
                 #Created user succesfully
                 #switch to logged in screen
-                print("created user")
+                print(f"Logged in to {self.user.username}")
                 DeviceControllerMonitor.setUser(self.user)
                 SceneManager.setCurrentIndex(SceneManager.currentIndex() + 1)
-            else:
-                print("here")
-                self.welcomeScene()
 
         self.loginButton.clicked.connect(createUser)
 
     def logUserOut(self):
+        print(f"Logged out of {self.user.username}")
+        self.usernameField.setText("")
+        self.passwordField.setText("")
         self.user = None
+
 
 class DeviceControllerMonitor(QDialog):
     def __init__(self):
@@ -65,6 +67,7 @@ class DeviceControllerMonitor(QDialog):
         self.arpField.setText(str(self.user.getARP()))
 
     def saveToUser(self):
+        print(f"Saving attributes for {self.user.username}")
         self.user.setLowerRateLimit(self.lowerRateLimitField.text())
         self.user.setUpperRateLimit(self.upperRateLimitField.text())
         self.user.setAtrialAmplitude(self.atrialAmplitudeField.text())
