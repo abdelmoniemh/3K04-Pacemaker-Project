@@ -35,15 +35,15 @@ class user():
         
         # initialize programmable parameters
         # TODO: add rest of programmable parameters and their getters/setters
-        self.BradycardiaOperatingMode = "VOO"
-        self.LowerRateLimit = 0
-        self.UpperRateLimit = 0
-        self.AtrialAmplitude = 0
-        self.AtrialPulseWidth = 0
-        self.VentricularAmplitude = 0
-        self.VentricularPulseWidth = 0
-        self.VRP = 0
-        self.ARP = 0
+        self.BradycardiaOperatingMode = "DDD"
+        self.LowerRateLimit = 60
+        self.UpperRateLimit = 120
+        self.AtrialAmplitude = 3.5
+        self.AtrialPulseWidth = 0.4
+        self.VentricularAmplitude = 3.5
+        self.VentricularPulseWidth = 0.4
+        self.VRP = 320
+        self.ARP = 250
         
 
     def serialize(self):

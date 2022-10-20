@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1518</width>
+    <width>1618</width>
     <height>1074</height>
    </rect>
   </property>
@@ -30,13 +30,13 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>1500</width>
+       <width>1600</width>
        <height>50</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>1500</width>
+       <width>1600</width>
        <height>35</height>
       </size>
      </property>
@@ -54,7 +54,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>1500</width>
+        <width>1600</width>
         <height>35</height>
        </rect>
       </property>
@@ -77,13 +77,13 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>1500</width>
+       <width>1600</width>
        <height>1000</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>1500</width>
+       <width>1600</width>
        <height>1000</height>
       </size>
      </property>
@@ -102,37 +102,24 @@
         <x>10</x>
         <y>10</y>
         <width>591</width>
-        <height>233</height>
+        <height>243</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
        </property>
-       <item row="5" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLineEdit" name="arpField"/>
-       </item>
-       <item row="7" column="4">
-        <widget class="QPushButton" name="logoutButton">
+       <item row="0" column="1">
+        <widget class="QLabel" name="chambersSensedLabel">
          <property name="text">
-          <string>Log out</string>
+          <string>Chambers Sensed</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="0" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="lowerRateLimitLabel">
+       <item row="0" column="0">
+        <widget class="QLabel" name="chambersPacedLabel">
          <property name="text">
-          <string>Lower Rate Limit:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="vrpField"/>
-       </item>
-       <item row="3" column="0" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="atrialAmplitudeLabel">
-         <property name="text">
-          <string>Atrial Amplitude:</string>
+          <string>Chambers Paced</string>
          </property>
         </widget>
        </item>
@@ -143,20 +130,10 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="3">
-        <widget class="QLineEdit" name="atrialPulseWidthField"/>
-       </item>
-       <item row="8" column="0" colspan="5">
-        <widget class="QLabel" name="errorLabel">
+       <item row="3" column="0" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="atrialAmplitudeLabel">
          <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="ventricularPulseWidthLabel">
-         <property name="text">
-          <string>Ventricular Pulse Width:</string>
+          <string>Atrial Amplitude:</string>
          </property>
         </widget>
        </item>
@@ -164,76 +141,6 @@
         <widget class="QLabel" name="rateModulationLabel">
          <property name="text">
           <string>Rate Modulation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-        <widget class="QLabel" name="arpLabel">
-         <property name="text">
-          <string>ARP:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="ventricularAmplitudeLabel">
-         <property name="text">
-          <string>Ventricular Amplitude: </string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QComboBox" name="upperRateLimitField">
-         <item>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="2" column="2" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="upperRateLimitLabel">
-         <property name="text">
-          <string>Upper Rate Limit</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
-       </item>
-       <item row="2" column="1">
-        <widget class="QComboBox" name="lowerRateLimitField">
-         <item>
-          <property name="text">
-           <string>0</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>1</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>2.2</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>3.245</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="atrialAmplitudeField"/>
-       </item>
-       <item row="4" column="3">
-        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
-       </item>
-       <item row="5" column="0" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="vrpLabel">
-         <property name="text">
-          <string>VRP:</string>
          </property>
         </widget>
        </item>
@@ -251,6 +158,12 @@
          </item>
         </widget>
        </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
+       </item>
+       <item row="4" column="3">
+        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
+       </item>
        <item row="0" column="2">
         <widget class="QLabel" name="rtsLabel">
          <property name="text">
@@ -258,8 +171,21 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="responseComboBox">
+       <item row="5" column="3" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLineEdit" name="arpField"/>
+       </item>
+       <item row="8" column="0" colspan="5">
+        <widget class="QLabel" name="errorLabel">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="pacedComboBox">
+         <property name="currentIndex">
+          <number>2</number>
+         </property>
          <item>
           <property name="text">
            <string>O - None</string>
@@ -267,25 +193,73 @@
          </item>
          <item>
           <property name="text">
-           <string>T - Triggered</string>
+           <string>A - Atrium</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>I - Inhibited</string>
+           <string>V - Ventricle</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>D - Tracked</string>
+           <string>D - Dual</string>
           </property>
          </item>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="chambersSensedLabel">
+       <item row="7" column="4">
+        <widget class="QPushButton" name="logoutButton">
          <property name="text">
-          <string>Chambers Sensed</string>
+          <string>Log out</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="atrialAmplitudeField"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="ventricularAmplitudeLabel">
+         <property name="text">
+          <string>Ventricular Amplitude: </string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+        <widget class="QLabel" name="arpLabel">
+         <property name="text">
+          <string>ARP:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="saveAllButton">
+         <property name="text">
+          <string>Save All</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLineEdit" name="atrialPulseWidthField"/>
+       </item>
+       <item row="2" column="0" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="lowerRateLimitLabel">
+         <property name="text">
+          <string>Lower Rate Limit:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="upperRateLimitLabel">
+         <property name="text">
+          <string>Upper Rate Limit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="resetButton">
+         <property name="text">
+          <string>Reset</string>
          </property>
         </widget>
        </item>
@@ -313,15 +287,22 @@
          </item>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="chambersPacedLabel">
+       <item row="4" column="2">
+        <widget class="QLabel" name="ventricularPulseWidthLabel">
          <property name="text">
-          <string>Chambers Paced</string>
+          <string>Ventricular Pulse Width:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="pacedComboBox">
+       <item row="5" column="0" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="vrpLabel">
+         <property name="text">
+          <string>VRP:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="responseComboBox">
          <item>
           <property name="text">
            <string>O - None</string>
@@ -329,34 +310,29 @@
          </item>
          <item>
           <property name="text">
-           <string>A - Atrium</string>
+           <string>T - Triggered</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>V - Ventricle</string>
+           <string>I - Inhibited</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>D - Dual</string>
+           <string>D - Tracked</string>
           </property>
          </item>
         </widget>
        </item>
-       <item row="0" column="4">
-        <widget class="QPushButton" name="saveAllButton">
-         <property name="text">
-          <string>Save All</string>
-         </property>
-        </widget>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="vrpField"/>
        </item>
-       <item row="1" column="4">
-        <widget class="QPushButton" name="resetButton">
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lowerRateLimitField"/>
+       </item>
+       <item row="2" column="3">
+        <widget class="QLineEdit" name="upperRateLimitField"/>
        </item>
       </layout>
      </widget>

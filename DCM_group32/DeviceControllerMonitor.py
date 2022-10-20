@@ -13,7 +13,7 @@ class loginScreen(QMainWindow):
         super().__init__()
         loadUi(os.path.join("UI", "MainWindow - LoginScreen.ui"), self)
         self.passwordField.setEchoMode(QLineEdit.Password)
-        self.setFixedSize(1500, 800)
+        self.setFixedSize(1600, 800)
 
         def createUser():
             username = self.usernameField.text()
@@ -54,7 +54,7 @@ class DeviceControllerMonitor(QDialog):
     def __init__(self):
         super().__init__()
         loadUi(os.path.join("UI", "EditProperties Screen.ui"), self)
-        self.setFixedSize(1500, 800)
+        self.setFixedSize(1600, 800)
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
         self.pacedComboBox.activated.connect(self.handlePacedModeChange)
@@ -82,19 +82,20 @@ class DeviceControllerMonitor(QDialog):
 
     def setUser(self, user):
         self.user = user
-        self.lowerRateLimitField.setCurrentText(str(self.user.getLowerRateLimit()))
-        self.upperRateLimitField.setCurrentText(str(self.user.getUpperRateLimit()))
+        self.lowerRateLimitField.setText(str(self.user.getLowerRateLimit()))
+        self.upperRateLimitField.setText(str(self.user.getUpperRateLimit()))
         self.atrialAmplitudeField.setText(str(self.user.getAtrialAmplitude()))
         self.atrialPulseWidthField.setText(str(self.user.getAtrialPulseWidth()))
         self.ventricularAmplitudeField.setText(str(self.user.getVentricularAmplitude()))
         self.ventricularPulseWidthField.setText(str(self.user.getVentricularPulseWidth()))
         self.vrpField.setText(str(self.user.getVRP()))
         self.arpField.setText(str(self.user.getARP()))
+        self.handlePacedModeChange()
 
     def saveToUser(self):
         print(f"Saving attributes for {self.user.username}")
-        self.user.setLowerRateLimit(int(self.lowerRateLimitField.currentText()))
-        self.user.setUpperRateLimit(int(self.upperRateLimitField.currentText()))
+        self.user.setLowerRateLimit(int(self.lowerRateLimitField.text()))
+        self.user.setUpperRateLimit(int(self.upperRateLimitField.text()))
         self.user.setAtrialAmplitude(float(self.atrialAmplitudeField.text()))
         self.user.setAtrialPulseWidth(float(self.atrialPulseWidthField.text()))
         self.user.setVentricularAmplitude(float(self.ventricularAmplitudeField.text()))
@@ -197,7 +198,7 @@ class DeviceControllerMonitor(QDialog):
 
 app = QApplication([])
 SceneManager = QStackedWidget()
-SceneManager.setFixedSize(1500, 800)
+SceneManager.setFixedSize(1600, 800)
 DeviceControllerMonitor = DeviceControllerMonitor()
 loginScreen = loginScreen()
 
