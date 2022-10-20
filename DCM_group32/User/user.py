@@ -66,7 +66,7 @@ class user():
                 self.__dict__[attr] = userAttributes[attr]
             if not sha256_crypt.verify(password, self.password):
                 raise KeyError #wrong password, catch and retry on gui side
-        self.instanceCount = len(os.listdir(self.appUserDirectory))
+        self.instanceCount = len([file for file in os.listdir(self.appUserDirectory) if file.endswith(".json")])
 
     def getAllAttributes(self):
         return self.__dict__.items()
