@@ -77,78 +77,87 @@ class user():
         return self.BradycardiaOperatingMode
 
     def setBradycardiaOperatingMode(self, BradycardiaOperatingMode):
-        # add some restrictions on value based on pacemaker doc
         self.BradycardiaOperatingMode = BradycardiaOperatingMode
 
     def getLowerRateLimit(self):
         return self.LowerRateLimit
 
-    def setLowerRateLimit(self, LowerRateLimit: int):
+    def setLowerRateLimit(self, LowerRateLimit):
         # 30 - 175 ppm
-        if not (type(LowerRateLimit) == int):
-            raise TypeError("Lower Rate Limit must be an integer")
+        try:
+            LowerRateLimit = int(LowerRateLimit)
+        except:
+            raise TypeError("Lower Rate Limit must be a integer")
         self.LowerRateLimit = LowerRateLimit
 
     def getUpperRateLimit(self):
         return self.UpperRateLimit
 
-    def setUpperRateLimit(self, UpperRateLimit: int):
+    def setUpperRateLimit(self, UpperRateLimit):
         # 50 - 175 ppm
-        if not (type(UpperRateLimit) == int):
-            raise TypeError("Upper Rate Limit must be an integer")
+        try:
+            UpperRateLimit = int(UpperRateLimit)
+        except:
+            raise TypeError("Upper Rate Limit must be a integer")
         self.UpperRateLimit = UpperRateLimit
 
     def getAtrialAmplitude(self):
         return self.AtrialAmplitude
 
-    def setAtrialAmplitude(self, AtrialAmplitude: float):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(AtrialAmplitude) == float):
-            raise TypeError("Atrial Amplitude must be an float")
+    def setAtrialAmplitude(self, AtrialAmplitude):
+        try:
+            AtrialAmplitude = float(AtrialAmplitude)
+        except:
+            raise TypeError("Atrial Amplitude must be a float")
         self.AtrialAmplitude = AtrialAmplitude
 
     def getAtrialPulseWidth(self):
         return self.AtrialPulseWidth
 
-    def setAtrialPulseWidth(self, AtrialPulseWidth: float):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(AtrialPulseWidth) == float):
-            raise TypeError("Atrial Pulse Width must be an float")
+    def setAtrialPulseWidth(self, AtrialPulseWidth):
+        try:
+            AtrialPulseWidth = float(AtrialPulseWidth)
+        except:
+            raise TypeError("Atrial Pulse Width must be a float")
         self.AtrialPulseWidth = AtrialPulseWidth
 
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
 
-    def setVentricularAmplitude(self, VentricularAmplitude: float):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(VentricularAmplitude) == float):
-            raise TypeError("Ventricular Amplitude must be an float")
+    def setVentricularAmplitude(self, VentricularAmplitude):
+        try:
+            VentricularAmplitude = float(VentricularAmplitude)
+        except:
+            raise TypeError("Ventricular Amplitude must be a float")
         self.VentricularAmplitude = VentricularAmplitude
 
     def getVentricularPulseWidth(self):
         return self.VentricularPulseWidth
 
-    def setVentricularPulseWidth(self, VentricularPulseWidth: float):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(VentricularPulseWidth) == float):
-            raise TypeError("Ventricular Pulse Width must be an float")
+    def setVentricularPulseWidth(self, VentricularPulseWidth):
+        try:
+            VentricularPulseWidth = float(VentricularPulseWidth)
+        except:
+            raise TypeError("Ventricular Pulse Width must be a float")
         self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVRP(self):
         return self.VRP
 
     def setVRP(self, VRP: int):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(VRP) == int):
-            raise TypeError("VRP must be an integer")
+        try:
+            VRP = int(VRP)
+        except:
+            raise TypeError("VRP must be a integer")
         self.VRP = VRP
 
     def getARP(self):
         return self.ARP
 
     def setARP(self, ARP: int):
-        # add some restrictions on value based on pacemaker doc
-        if not (type(ARP) == int):
-            raise TypeError("ARP must be an integer")
+        try:
+            ARP = int(ARP)
+        except:
+            raise TypeError("ARP must be a integer")
         self.ARP = ARP
 

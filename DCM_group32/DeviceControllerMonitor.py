@@ -94,15 +94,20 @@ class DeviceControllerMonitor(QDialog):
 
     def saveToUser(self):
         print(f"Saving attributes for {self.user.username}")
-        self.user.setLowerRateLimit(int(self.lowerRateLimitField.text()))
-        self.user.setUpperRateLimit(int(self.upperRateLimitField.text()))
-        self.user.setAtrialAmplitude(float(self.atrialAmplitudeField.text()))
-        self.user.setAtrialPulseWidth(float(self.atrialPulseWidthField.text()))
-        self.user.setVentricularAmplitude(float(self.ventricularAmplitudeField.text()))
-        self.user.setVentricularPulseWidth(float(self.ventricularPulseWidthField.text()))
-        self.user.setVRP(int(self.vrpField.text()))
-        self.user.setARP(int(self.arpField.text()))
-        self.user.serialize()
+        self.errorLabel.setText("")
+        try:
+
+            self.user.setLowerRateLimit(self.lowerRateLimitField.text())
+            self.user.setUpperRateLimit(self.upperRateLimitField.text())
+            self.user.setAtrialAmplitude(self.atrialAmplitudeField.text())
+            self.user.setAtrialPulseWidth(self.atrialPulseWidthField.text())
+            self.user.setVentricularAmplitude(self.ventricularAmplitudeField.text())
+            self.user.setVentricularPulseWidth(self.ventricularPulseWidthField.text())
+            self.user.setVRP(self.vrpField.text())
+            self.user.setARP(self.arpField.text())
+            self.user.serialize()
+        except Exception as e:
+            self.errorLabel.setText(f"Error Saving: {e}")
 
     def logOut(self):
         self.user = None
