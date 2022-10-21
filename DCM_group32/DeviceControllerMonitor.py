@@ -24,13 +24,18 @@ class loginScreen(QMainWindow):
                     raise ValueError
             except Exception as e:
                 if (username == ""):  # Username cannot be empty
+                    print("Username cannot be empty")
                     self.errorLabel.setText("Username cannot be empty")
                 elif (type(e) == ValueError):  # Too many users to create new one
-                    self.errorLabel.setText("The max amount of users has been hit.\n \
+                    print("Sign Up Failed: The max amount of users has been hit.\n \
+                                        Delete users before creating more.")
+                    self.errorLabel.setText("Sign Up Failed: The max amount of users has been hit.\n \
                     Delete users before creating more.")
                 elif (type(e) == KeyError):  # Wrong password
-                    self.errorLabel.setText("Wrong Password")
+                    print("Login Failed: Wrong Password")
+                    self.errorLabel.setText("Login Failed: Wrong Password")
                 else:  # Unknown Error!
+                    print(f"Unhandled Error: {e}")
                     self.errorLabel.setText(f"Unhandled Error: {e}")
                 return False
 
@@ -47,6 +52,7 @@ class loginScreen(QMainWindow):
         print(f"Logged out of {self.user.username}")
         self.usernameField.setText("")
         self.passwordField.setText("")
+        self.errorLabel.setText("")
         self.user = None
 
 
@@ -96,7 +102,6 @@ class DeviceControllerMonitor(QDialog):
         print(f"Saving attributes for {self.user.username}")
         self.errorLabel.setText("")
         try:
-
             self.user.setLowerRateLimit(self.lowerRateLimitField.text())
             self.user.setUpperRateLimit(self.upperRateLimitField.text())
             self.user.setAtrialAmplitude(self.atrialAmplitudeField.text())
@@ -107,6 +112,7 @@ class DeviceControllerMonitor(QDialog):
             self.user.setARP(self.arpField.text())
             self.user.serialize()
         except Exception as e:
+            print(f"Error Saving: {e}")
             self.errorLabel.setText(f"Error Saving: {e}")
 
     def logOut(self):
@@ -118,7 +124,6 @@ class DeviceControllerMonitor(QDialog):
         self.errorLabel.setText("")
         self.user.setBradycardiaOperatingMode(self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
                                               + self.responseComboBox.currentText()[0])
-
         if self.user.getBradycardiaOperatingMode() in ['AAI', 'AAT']:
             self.hideFields()
             self.lowerRateLimitLabel.setHidden(False)
@@ -197,7 +202,8 @@ class DeviceControllerMonitor(QDialog):
             self.vrpField.setHidden(False)
         else:
             self.hideFields()
-            self.errorLabel.setText("Invalid Bradycardia Operating Mode")
+            print(f"{self.user.getBradycardiaOperatingMode()} is an invalid Bradycardia Operating Mode")
+            self.errorLabel.setText(f"{self.user.getBradycardiaOperatingMode()} is an invalid Bradycardia Operating Mode")
 
 
 
