@@ -63,9 +63,9 @@ class DeviceControllerMonitor(QDialog):
         self.setFixedSize(1600, 800)
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
-        self.pacedComboBox.activated.connect(self.handlePacedModeChange)
-        self.sensedComboBox.activated.connect(self.handlePacedModeChange)
-        self.responseComboBox.activated.connect(self.handlePacedModeChange)
+        self.pacedComboBox.activated.connect(self.handleModeChange)
+        self.sensedComboBox.activated.connect(self.handleModeChange)
+        self.responseComboBox.activated.connect(self.handleModeChange)
         self.hideFields()
 
     def hideFields(self):
@@ -96,7 +96,20 @@ class DeviceControllerMonitor(QDialog):
         self.ventricularPulseWidthField.setText(str(self.user.getVentricularPulseWidth()))
         self.vrpField.setText(str(self.user.getVRP()))
         self.arpField.setText(str(self.user.getARP()))
-        self.handlePacedModeChange()
+        BychardiaSettingMap = {
+            "V": "V - Ventricle",
+            "O": "O - None",
+            "A": "A - Atrium",
+            "I": "I - Inhibited",
+            "T": "T - Triggered",
+            "D": "D - Dual"
+        }
+        self.pacedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[0]])
+        self.sensedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]])
+        responseBox = BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]] if not self.user.getBradycardiaOperatingMode()[1] == "D" \
+            else "D - Tracked"
+        self.responseComboBox.setCurrentText(responseBox)
+        self.handleModeChange()
 
     def saveToUser(self):
         print(f"Saving attributes for {self.user.username}")
@@ -120,7 +133,7 @@ class DeviceControllerMonitor(QDialog):
         loginScreen.logUserOut()
         SceneManager.setCurrentIndex(SceneManager.currentIndex() - 1)
 
-    def handlePacedModeChange(self):
+    def handleModeChange(self):
         self.errorLabel.setText("")
         self.user.setBradycardiaOperatingMode(self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
                                               + self.responseComboBox.currentText()[0])
