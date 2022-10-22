@@ -13,7 +13,7 @@ class user():
     if not os.path.exists(appUserDirectory):
             os.makedirs(appUserDirectory)
     
-    instanceCount = len(os.listdir(appUserDirectory))
+    instanceCount = len([file for file in os.listdir(appUserDirectory) if file.endswith(".json")])
 
     def __init__(self, username, password, subDirectory=""):
         self.createAttributes(username, password)
