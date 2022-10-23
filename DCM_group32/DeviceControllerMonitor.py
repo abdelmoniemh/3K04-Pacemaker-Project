@@ -88,6 +88,7 @@ class DeviceControllerMonitor(QDialog):
 
     def setUser(self, user):
         self.user = user
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: [] Communicating: []")
         self.lowerRateLimitField.setText(str(self.user.getLowerRateLimit()))
         self.upperRateLimitField.setText(str(self.user.getUpperRateLimit()))
         self.atrialAmplitudeField.setText(str(self.user.getAtrialAmplitude()))
