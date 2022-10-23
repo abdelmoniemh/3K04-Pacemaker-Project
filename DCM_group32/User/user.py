@@ -88,12 +88,10 @@ class user():
             LowerRateLimit = int(LowerRateLimit)
         except:
             raise TypeError("Lower Rate Limit must be a integer")
-        self.LowerRateLimit = LowerRateLimit
 
-    def setLowerRateLimitRange(LowerRateLimit):
-        # 30 - 175 ppm
         if  LowerRateLimit < 30 or LowerRateLimit > 175:
             raise Exception ("Lower Rate limit is not within the correct range")
+        self.LowerRateLimit = LowerRateLimit
 
     def getUpperRateLimit(self):
         return self.UpperRateLimit
@@ -104,111 +102,101 @@ class user():
             UpperRateLimit = int(UpperRateLimit)
         except:
             raise TypeError("Upper Rate Limit must be a integer")
-        self.UpperRateLimit = UpperRateLimit
 
-    def setUpperRateLimitRange(UpperRateLimit):
-        # 50 - 175 ppm
         if  UpperRateLimit < 50 or UpperRateLimit > 175:
             raise Exception ("Upper rate limit is not within the correct range")
+        self.UpperRateLimit = UpperRateLimit
 
     def getAtrialAmplitude(self):
         return self.AtrialAmplitude
 
     def setAtrialAmplitude(self, AtrialAmplitude):
+        # off, 0.5-3.2V, 3.5-7V
         try:
             AtrialAmplitude = float(AtrialAmplitude)
         except:
             raise TypeError("Atrial Amplitude must be a float")
-        self.AtrialAmplitude = AtrialAmplitude
-
-    def setAtrialAmplitudeRange(AtrialAmplitude):
-        # off, 0.5-3.2V, 3.5-7V
+        
         if AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2:
             if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
                 raise Exception ("Atrial amplitude is not within the correct ranges")
-
-    def setAtrialAmplitudeRange_unreg(AtrialAmplitude):
-        # off, 1.25, 2.5, 3.75, 5V
-        if AtrialAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
-            raise Exception ("Atrial amplitude is not an acceptable value")
+        
+        # off, 1.25, 2.5, 3.75, 5V for unregulated 
+        #elif AtrialAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+        #    raise Exception ("Atrial amplitude is not an acceptable value")
+        self.AtrialAmplitude = AtrialAmplitude
 
     def getAtrialPulseWidth(self):
         return self.AtrialPulseWidth
 
     def setAtrialPulseWidth(self, AtrialPulseWidth):
+        # 0.05ms, 0.1-1.9ms
         try:
             AtrialPulseWidth = float(AtrialPulseWidth)
         except:
             raise TypeError("Atrial Pulse Width must be a float")
-        self.AtrialPulseWidth = AtrialPulseWidth
-
-    def setAtrialPulseWidthRange(AtrialPulseWidth):
-        # 0.05ms, 0.1-1.9ms
+        
         if  AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
             raise Exception ("Atrial pulse width is not within the correct range")
+        self.AtrialPulseWidth = AtrialPulseWidth
 
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
 
     def setVentricularAmplitude(self, VentricularAmplitude):
+        # off, 0.5-3.2V, 3.5-7V
         try:
             VentricularAmplitude = float(VentricularAmplitude)
         except:
             raise TypeError("Ventricular Amplitude must be a float")
-        self.VentricularAmplitude = VentricularAmplitude
 
-    def setVentricularAmplitudeRange(VentricularAmplitude):
-        # off, 0.5-3.2V, 3.5-7V
         if VentricularAmplitude < 0.5 or VentricularAmplitude > 3.2:
             if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
                 raise Exception ("Ventricular amplitude is not within the correct ranges")
-    
-    def setVentricularAmplitudeRange_unreg(VentricularAmplitude):
-        # off, 1.25, 2.5, 3.75, 5V
-        if VentricularAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
-            raise Exception ("Ventricular amplitude is not an acceptable value")
+        
+        # off, 1.25, 2.5, 3.75, 5V for unregulated
+        #elif VentricularAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+        #    raise Exception ("Ventricular amplitude is not an acceptable value")
+        self.VentricularAmplitude = VentricularAmplitude
 
     def getVentricularPulseWidth(self):
         return self.VentricularPulseWidth
 
     def setVentricularPulseWidth(self, VentricularPulseWidth):
+        # 0.05ms, 0.1-1.9ms
         try:
             VentricularPulseWidth = float(VentricularPulseWidth)
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
-        self.VentricularPulseWidth = VentricularPulseWidth
 
-    def setVentricularPulseWidthRange(VentricularPulseWidth):
-        # 0.05ms, 0.1-1.9ms
         if  VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
             raise Exception ("Ventricular pulse width is not within the correct range")
+        self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVRP(self):
         return self.VRP
 
     def setVRP(self, VRP: int):
+        # 150-500ms
         try:
             VRP = int(VRP)
         except:
             raise TypeError("VRP must be a integer")
-        self.VRP = VRP
-
-    def setVRPrange(VRP):
-        # 150-500ms
+        
         if  VRP < 150 or VRP > 500:
             raise Exception ("Ventricular refractory period is not within the correct range")
+        self.VRP = VRP
 
     def getARP(self):
         return self.ARP
 
     def setARP(self, ARP: int):
+        # 150-500ms
         try:
             ARP = int(ARP)
         except:
             raise TypeError("ARP must be a integer")
-        self.ARP = ARP
-
-    def setARPrange(ARP):
-        # 150-500ms
+        
         if  ARP < 150 or ARP > 500:
             raise Exception ("Atrial refractory period is not within the correct range")
+        self.ARP = ARP
