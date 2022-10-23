@@ -88,6 +88,9 @@ class user():
             LowerRateLimit = int(LowerRateLimit)
         except:
             raise TypeError("Lower Rate Limit must be a integer")
+
+        if  LowerRateLimit < 30 or LowerRateLimit > 175:
+            raise Exception ("Lower Rate limit is not within the correct range")
         self.LowerRateLimit = LowerRateLimit
 
     def getUpperRateLimit(self):
@@ -99,65 +102,101 @@ class user():
             UpperRateLimit = int(UpperRateLimit)
         except:
             raise TypeError("Upper Rate Limit must be a integer")
+
+        if  UpperRateLimit < 50 or UpperRateLimit > 175:
+            raise Exception ("Upper rate limit is not within the correct range")
         self.UpperRateLimit = UpperRateLimit
 
     def getAtrialAmplitude(self):
         return self.AtrialAmplitude
 
     def setAtrialAmplitude(self, AtrialAmplitude):
+        # off, 0.5-3.2V, 3.5-7V
         try:
             AtrialAmplitude = float(AtrialAmplitude)
         except:
             raise TypeError("Atrial Amplitude must be a float")
+        
+        if AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2:
+            if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
+                raise Exception ("Atrial amplitude is not within the correct ranges")
+        
+        # off, 1.25, 2.5, 3.75, 5V for unregulated 
+        #elif AtrialAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+        #    raise Exception ("Atrial amplitude is not an acceptable value")
         self.AtrialAmplitude = AtrialAmplitude
 
     def getAtrialPulseWidth(self):
         return self.AtrialPulseWidth
 
     def setAtrialPulseWidth(self, AtrialPulseWidth):
+        # 0.05ms, 0.1-1.9ms
         try:
             AtrialPulseWidth = float(AtrialPulseWidth)
         except:
             raise TypeError("Atrial Pulse Width must be a float")
+        
+        if  AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
+            raise Exception ("Atrial pulse width is not within the correct range")
         self.AtrialPulseWidth = AtrialPulseWidth
 
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
 
     def setVentricularAmplitude(self, VentricularAmplitude):
+        # off, 0.5-3.2V, 3.5-7V
         try:
             VentricularAmplitude = float(VentricularAmplitude)
         except:
             raise TypeError("Ventricular Amplitude must be a float")
+
+        if VentricularAmplitude < 0.5 or VentricularAmplitude > 3.2:
+            if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
+                raise Exception ("Ventricular amplitude is not within the correct ranges")
+        
+        # off, 1.25, 2.5, 3.75, 5V for unregulated
+        #elif VentricularAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+        #    raise Exception ("Ventricular amplitude is not an acceptable value")
         self.VentricularAmplitude = VentricularAmplitude
 
     def getVentricularPulseWidth(self):
         return self.VentricularPulseWidth
 
     def setVentricularPulseWidth(self, VentricularPulseWidth):
+        # 0.05ms, 0.1-1.9ms
         try:
             VentricularPulseWidth = float(VentricularPulseWidth)
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
+
+        if  VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
+            raise Exception ("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVRP(self):
         return self.VRP
 
     def setVRP(self, VRP: int):
+        # 150-500ms
         try:
             VRP = int(VRP)
         except:
             raise TypeError("VRP must be a integer")
+        
+        if  VRP < 150 or VRP > 500:
+            raise Exception ("Ventricular refractory period is not within the correct range")
         self.VRP = VRP
 
     def getARP(self):
         return self.ARP
 
     def setARP(self, ARP: int):
+        # 150-500ms
         try:
             ARP = int(ARP)
         except:
             raise TypeError("ARP must be a integer")
+        
+        if  ARP < 150 or ARP > 500:
+            raise Exception ("Atrial refractory period is not within the correct range")
         self.ARP = ARP
-
