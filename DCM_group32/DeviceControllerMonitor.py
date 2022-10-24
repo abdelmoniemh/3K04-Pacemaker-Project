@@ -63,10 +63,13 @@ class DeviceControllerMonitor(QDialog):
         self.setFixedSize(1600, 800)
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
+        self.resetButton.clicked.connect(self.resetFields)
         self.pacedComboBox.activated.connect(self.handleModeChange)
         self.sensedComboBox.activated.connect(self.handleModeChange)
         self.responseComboBox.activated.connect(self.handleModeChange)
         self.hideFields()
+        self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
+                                   + self.responseComboBox.currentText()[0]
 
     def hideFields(self):
         self.lowerRateLimitLabel.setHidden(True)
@@ -89,6 +92,8 @@ class DeviceControllerMonitor(QDialog):
     def setUser(self, user):
         self.user = user
         self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: [] Communicating: []")
+        self.resetFields()
+    def resetFields(self):
         self.lowerRateLimitField.setText(str(self.user.getLowerRateLimit()))
         self.upperRateLimitField.setText(str(self.user.getUpperRateLimit()))
         self.atrialAmplitudeField.setText(str(self.user.getAtrialAmplitude()))
@@ -107,7 +112,8 @@ class DeviceControllerMonitor(QDialog):
         }
         self.pacedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[0]])
         self.sensedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]])
-        responseBox = BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]] if not self.user.getBradycardiaOperatingMode()[1] == "D" \
+        responseBox = BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]] if not \
+        self.user.getBradycardiaOperatingMode()[1] == "D" \
             else "D - Tracked"
         self.responseComboBox.setCurrentText(responseBox)
         self.handleModeChange()
@@ -124,6 +130,7 @@ class DeviceControllerMonitor(QDialog):
             self.user.setVentricularPulseWidth(self.ventricularPulseWidthField.text())
             self.user.setVRP(self.vrpField.text())
             self.user.setARP(self.arpField.text())
+            self.user.setBradycardiaOperatingMode(self.tempBradycardiaMode)
             self.user.serialize()
         except Exception as e:
             print(f"Error Saving: {e}")
@@ -136,8 +143,8 @@ class DeviceControllerMonitor(QDialog):
 
     def handleModeChange(self):
         self.errorLabel.setText("")
-        self.user.setBradycardiaOperatingMode(self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
-                                              + self.responseComboBox.currentText()[0])
+        self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
+                                   + self.responseComboBox.currentText()[0]
         def showRateLimits():
             self.lowerRateLimitLabel.setHidden(False)
             self.lowerRateLimitField.setHidden(False)
@@ -163,30 +170,30 @@ class DeviceControllerMonitor(QDialog):
             self.vrpLabel.setHidden(False)
             self.vrpField.setHidden(False)
 
-        if self.user.getBradycardiaOperatingMode() in ['AAI', 'AAT']:
+        if self.tempBradycardiaMode in ['AAI', 'AAT']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
-        elif self.user.getBradycardiaOperatingMode() == 'AOO':
+        elif self.tempBradycardiaMode == 'AOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
-        elif self.user.getBradycardiaOperatingMode() in ['VVT', 'VVI', 'VDD']:
+        elif self.tempBradycardiaMode in ['VVT', 'VVI', 'VDD']:
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
             showVrpParameters()
-        elif self.user.getBradycardiaOperatingMode() == 'VOO':
+        elif self.tempBradycardiaMode == 'VOO':
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
-        elif self.user.getBradycardiaOperatingMode() == 'DOO':
+        elif self.tempBradycardiaMode == 'DOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showVentricularParameters()
-        elif self.user.getBradycardiaOperatingMode() in ['DDI', 'DDD']:
+        elif self.tempBradycardiaMode in ['DDI', 'DDD']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
@@ -195,8 +202,8 @@ class DeviceControllerMonitor(QDialog):
             showVrpParameters()
         else:
             self.hideFields()
-            print(f"{self.user.getBradycardiaOperatingMode()} is an invalid Bradycardia Operating Mode")
-            self.errorLabel.setText(f"{self.user.getBradycardiaOperatingMode()} is an invalid Bradycardia Operating Mode")
+            print(f"{self.tempBradycardiaMode} is an invalid Bradycardia Operating Mode")
+            self.errorLabel.setText(f"{self.tempBradycardiaMode} is an invalid Bradycardia Operating Mode")
 
 
 
