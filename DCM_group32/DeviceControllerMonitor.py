@@ -171,12 +171,12 @@ class DeviceControllerMonitor(QDialog):
             self.vrpLabel.setHidden(False)
             self.vrpField.setHidden(False)
 
-        if self.tempBradycardiaMode in ['AAI', 'AAT']:
+        if self.tempBradycardiaMode in ['AAIO', 'AATO']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
-        elif self.tempBradycardiaMode == 'AOO':
+        elif self.tempBradycardiaMode == 'AOOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
