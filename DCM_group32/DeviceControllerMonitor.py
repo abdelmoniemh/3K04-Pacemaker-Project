@@ -6,14 +6,15 @@ from PyQt5.uic import loadUi
 import PyQt5.QtCore as Qt
 import User.user as User
 
-
+WIDTH = 1600
+HEIGHT = 800
 class loginScreen(QMainWindow):
 
     def __init__(self):
         super().__init__()
         loadUi(os.path.join("UI", "MainWindow - LoginScreen.ui"), self)
         self.passwordField.setEchoMode(QLineEdit.Password)
-        self.setFixedSize(1600, 800)
+        self.setFixedSize(WIDTH, HEIGHT)
 
         def createUser():
             username = self.usernameField.text()
@@ -60,7 +61,7 @@ class DeviceControllerMonitor(QDialog):
     def __init__(self):
         super().__init__()
         loadUi(os.path.join("UI", "EditProperties Screen.ui"), self)
-        self.setFixedSize(1600, 800)
+        self.setFixedSize(WIDTH, HEIGHT)
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
         self.resetButton.clicked.connect(self.resetFields)
@@ -179,12 +180,12 @@ class DeviceControllerMonitor(QDialog):
             self.vrpLabel.setHidden(False)
             self.vrpField.setHidden(False)
 
-        if self.tempBradycardiaMode in ['AAI', 'AAT']:
+        if self.tempBradycardiaMode in ['AAIO', 'AATO']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
-        elif self.tempBradycardiaMode == 'AOO':
+        elif self.tempBradycardiaMode == 'AOOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
@@ -218,7 +219,7 @@ class DeviceControllerMonitor(QDialog):
 
 app = QApplication([])
 SceneManager = QStackedWidget()
-SceneManager.setFixedSize(1600, 800)
+SceneManager.setFixedSize(WIDTH, HEIGHT)
 DeviceControllerMonitor = DeviceControllerMonitor()
 loginScreen = loginScreen()
 
