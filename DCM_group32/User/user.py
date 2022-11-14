@@ -35,7 +35,7 @@ class user():
         
         # initialize programmable parameters
         # TODO: add rest of programmable parameters and their getters/setters
-        self.BradycardiaOperatingMode = "DDD"
+        self.BradycardiaOperatingMode = "DDDO"
         self.LowerRateLimit = 60
         self.UpperRateLimit = 120
         self.AtrialAmplitude = 3.5
