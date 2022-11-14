@@ -46,6 +46,8 @@ class user():
         self.VentricularSensitivity = 0.5
         self.VRP = 320
         self.ARP = 250
+        self.MaxSensorRate = 100
+        self.FixedAVdelay = 150
         
 
     def serialize(self):
@@ -210,3 +212,13 @@ class user():
         if ARP < 150 or ARP > 500:
             raise ValueError("Atrial refractory period is not within the correct range")
         self.ARP = ARP
+
+    def getMaxSensorRate(self):
+        return self.MaxSensorRate
+    
+    #def setMaxSensorRate(self, MaxSensorRate):
+
+    def getFixedAVdelay(self):
+        return self.FixedAVdelay
+
+    #def setFixedAVdelay(self, FixedAVdelay):

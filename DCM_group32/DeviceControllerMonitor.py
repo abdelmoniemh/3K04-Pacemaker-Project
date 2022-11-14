@@ -96,6 +96,8 @@ class DeviceControllerMonitor(QDialog):
         self.arpField.setHidden(True)
         self.MaxSensorRateLabel.setHidden(True)
         self.MaxSensorRateField.setHidden(True)
+        self.FixedAVdelayLabel.setHidden(True) 
+        self.FixedAVdelayField.setHidden(True)
 
     def setUser(self, user):
         self.user = user
@@ -112,7 +114,8 @@ class DeviceControllerMonitor(QDialog):
         self.ventricularSensitivityField.setText(str(self.user.getVentricularSensitivity()))
         self.vrpField.setText(str(self.user.getVRP()))
         self.arpField.setText(str(self.user.getARP()))
-        self.MaxSensorRateLabel.setText(str(self.user.getARP()))
+        self.MaxSensorRateField.setText(str(self.user.getMaxSensorRate()))
+        self.FixedAVdelayField.setText(str(self.user.getFixedAVdelay()))
         BychardiaSettingMap = {
             "V": "V - Ventricle",
             "O": "O - None",
@@ -145,7 +148,8 @@ class DeviceControllerMonitor(QDialog):
             self.user.setVentricularSensitivity(self.ventricularSensitivityField.text())
             self.user.setVRP(self.vrpField.text())
             self.user.setARP(self.arpField.text())
-            self.user.MaxSensorRate(self.arpField.text())
+            self.user.MaxSensorRate(self.MaxSensorRateField.text())
+            self.user.FixedAVdelay(self.FixedAVdelayField.text())
             self.user.setBradycardiaOperatingMode(self.tempBradycardiaMode)
             self.user.serialize()
         except Exception as e:
@@ -173,16 +177,20 @@ class DeviceControllerMonitor(QDialog):
             self.atrialAmplitudeField.setHidden(False)
             self.atrialPulseWidthLabel.setHidden(False)
             self.atrialPulseWidthField.setHidden(False)
-            self.atrialSensitivityLabel.setHidden(False)
-            self.atrialSensitivityField.setHidden(False)
+
+        def showArtialSensitivity():
+            self.atrialSensitivityLabel.setHidden(False) 
+            self.atrialSensitivityField.setHidden(False) 
 
         def showVentricularParameters():
             self.ventricularAmplitudeLabel.setHidden(False)
             self.ventricularAmplitudeField.setHidden(False)
             self.ventricularPulseWidthLabel.setHidden(False)
             self.ventricularPulseWidthField.setHidden(False)
-            self.ventricularSensitivityLabel.setHidden(False)
-            self.ventricularSensitivityField.setHidden(False)
+
+        def showVentricularSensitivity():
+            self.ventricularSensitivityLabel.setHidden(False) 
+            self.ventricularSensitivityField.setHidden(False)  
 
         def showArpParameters():
             self.arpLabel.setHidden(False)
@@ -193,18 +201,25 @@ class DeviceControllerMonitor(QDialog):
             self.vrpField.setHidden(False)
 
         def showMaxSensorRate():
-            self.MaxSensorRate.setHidden(False)
+            self.MaxSensorRateLabel.setHidden(False)
+            self.MaxSensorRateField.setHidden(False)
+
+        def showFixedAVdelay():
+            self.FixedAVdelayLabel.setHidden(False)
+            self.FixedAVdelayField.setHidden(False)
 
         if self.tempBradycardiaMode == 'AATO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
+            showArtialSensitivity()
         elif self.tempBradycardiaMode == 'VVTO':
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
             showVrpParameters()
+            showVentricularSensitivity()
         elif self.tempBradycardiaMode == 'AOOO':
             self.hideFields()
             showRateLimits()
@@ -214,6 +229,7 @@ class DeviceControllerMonitor(QDialog):
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
+            showArtialSensitivity()
         elif self.tempBradycardiaMode == 'VOOO':
             self.hideFields()
             showRateLimits()
@@ -223,16 +239,20 @@ class DeviceControllerMonitor(QDialog):
             showRateLimits()
             showVentricularParameters()
             showVrpParameters()
+            showVentricularSensitivity()
         elif self.tempBradycardiaMode == 'VDDO':
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
             showVrpParameters()
+            showVentricularSensitivity()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode == 'DOOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showVentricularParameters()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode == 'DDIO':
             self.hideFields()
             showRateLimits()
@@ -240,6 +260,9 @@ class DeviceControllerMonitor(QDialog):
             showVentricularParameters()
             showArpParameters()
             showVrpParameters()
+            showArtialSensitivity()
+            showVentricularSensitivity()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode == 'DDDO':
             self.hideFields()
             showRateLimits()
@@ -247,30 +270,70 @@ class DeviceControllerMonitor(QDialog):
             showVentricularParameters()
             showArpParameters()
             showVrpParameters()
+            showArtialSensitivity()
+            showVentricularSensitivity()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode in ['AOOR']:
             self.hideFields()
+            showRateLimits()
+            showAtrialParameters()
             showMaxSensorRate()
         elif self.tempBradycardiaMode in ['AAIR']:
             self.hideFields()
+            showRateLimits()
+            showAtrialParameters()
+            showArpParameters()
+            showArtialSensitivity()
             showMaxSensorRate()
         elif self.tempBradycardiaMode in ['VOOR']:
             self.hideFields()
+            showRateLimits()
+            showVentricularParameters()
             showMaxSensorRate()
         elif self.tempBradycardiaMode in ['VVIR']:
             self.hideFields()
+            showRateLimits()
+            showVentricularParameters()
+            showVrpParameters()
+            showVentricularSensitivity()
             showMaxSensorRate()
         elif self.tempBradycardiaMode in ['VDDR']:
             self.hideFields()
+            showRateLimits()
+            showVentricularParameters()
+            showVrpParameters()
+            showVentricularSensitivity()
             showMaxSensorRate()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode in ['DOOR']:
             self.hideFields()
+            showRateLimits()
+            showAtrialParameters()
+            showVentricularParameters()
             showMaxSensorRate()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode in ['DDIR']:
             self.hideFields()
+            showRateLimits()
+            showAtrialParameters()
+            showVentricularParameters()
+            showArpParameters()
+            showVrpParameters()
+            showArtialSensitivity()
+            showVentricularSensitivity()
             showMaxSensorRate()
+            showFixedAVdelay()
         elif self.tempBradycardiaMode in ['DDDR']:
             self.hideFields()
+            showRateLimits()
+            showAtrialParameters()
+            showVentricularParameters()
+            showArpParameters()
+            showVrpParameters()
+            showArtialSensitivity()
+            showVentricularSensitivity()
             showMaxSensorRate()
+            showFixedAVdelay()
         else:
             self.hideFields()
             print(f"{self.tempBradycardiaMode} is an invalid Bradycardia Operating Mode")

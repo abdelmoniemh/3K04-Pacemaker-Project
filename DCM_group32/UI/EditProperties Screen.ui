@@ -102,7 +102,7 @@
         <x>10</x>
         <y>10</y>
         <width>651</width>
-        <height>254</height>
+        <height>260</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -113,6 +113,23 @@
         <widget class="QLabel" name="chambersSensedLabel">
          <property name="text">
           <string>Chambers Sensed</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
+        <widget class="QLabel" name="arpLabel">
+         <property name="text">
+          <string>           ARP:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QLineEdit" name="vrpField"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLabel" name="atrialPulseWidthLabel">
+         <property name="text">
+          <string> Atrial Pulse Width:</string>
          </property>
         </widget>
        </item>
@@ -140,6 +157,9 @@
          </property>
         </widget>
        </item>
+       <item row="4" column="3">
+        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
+       </item>
        <item row="1" column="3">
         <widget class="QComboBox" name="rateModulationComboBox">
          <item>
@@ -154,7 +174,7 @@
          </item>
         </widget>
        </item>
-       <item row="10" column="0" colspan="5">
+       <item row="11" column="0" colspan="5">
         <widget class="QLabel" name="errorLabel">
          <property name="text">
           <string>TextLabel</string>
@@ -175,12 +195,25 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="atrialSensitivityLabel">
+         <property name="text">
+          <string>  Atrial Sensitivity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="3">
+        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="chambersPacedLabel">
          <property name="text">
           <string>Chambers Paced</string>
          </property>
         </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="atrialPulseWidthField"/>
        </item>
        <item row="1" column="1">
         <widget class="QComboBox" name="sensedComboBox">
@@ -270,13 +303,6 @@
          </item>
         </widget>
        </item>
-       <item row="9" column="4">
-        <widget class="QPushButton" name="logoutButton">
-         <property name="text">
-          <string>Log out</string>
-         </property>
-        </widget>
-       </item>
        <item row="9" column="2">
         <widget class="QLabel" name="vrpLabel">
          <property name="text">
@@ -291,6 +317,13 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="ventricularSensitivityLabel">
+         <property name="text">
+          <string> Ventricular Sensitivity:</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="4">
         <widget class="QPushButton" name="saveAllButton">
          <property name="text">
@@ -298,22 +331,14 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="3">
+        <widget class="QLineEdit" name="ventricularSensitivityField"/>
+       </item>
        <item row="2" column="3">
         <widget class="QLineEdit" name="upperRateLimitField"/>
        </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="atrialPulseWidthLabel">
-         <property name="text">
-          <string> Atrial Pulse Width:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="atrialSensitivityLabel">
-         <property name="text">
-          <string>  Atrial Sensitivity:</string>
-         </property>
-        </widget>
+       <item row="9" column="1">
+        <widget class="QLineEdit" name="arpField"/>
        </item>
        <item row="3" column="2">
         <widget class="QLabel" name="ventricularAmplitudeLabel">
@@ -322,37 +347,32 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="atrialPulseWidthField"/>
-       </item>
-       <item row="3" column="3">
-        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="arpLabel">
+       <item row="10" column="0">
+        <widget class="QLabel" name="MaxSensorRateLabel">
          <property name="text">
-          <string>           ARP:</string>
+          <string> Max. Sensor Rate:</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="3">
-        <widget class="QLineEdit" name="vrpField"/>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="ventricularSensitivityLabel">
+       <item row="10" column="2">
+        <widget class="QLabel" name="FixedAVdelayLabel">
          <property name="text">
-          <string> Ventricular Sensitivity:</string>
+          <string>       Fixed AV Delay:</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
+       <item row="10" column="1">
+        <widget class="QLineEdit" name="MaxSensorRateField"/>
        </item>
-       <item row="9" column="1">
-        <widget class="QLineEdit" name="arpField"/>
+       <item row="10" column="3">
+        <widget class="QLineEdit" name="FixedAVdelayField"/>
        </item>
-       <item row="5" column="3">
-        <widget class="QLineEdit" name="ventricularSensitivityField"/>
+       <item row="10" column="4">
+        <widget class="QPushButton" name="logoutButton">
+         <property name="text">
+          <string>Log out</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
