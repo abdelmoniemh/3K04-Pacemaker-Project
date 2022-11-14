@@ -35,13 +35,15 @@ class user():
         
         # initialize programmable parameters
         # TODO: add rest of programmable parameters and their getters/setters
-        self.BradycardiaOperatingMode = "DDD"
+        self.BradycardiaOperatingMode = "DDDO"
         self.LowerRateLimit = 60
         self.UpperRateLimit = 120
         self.AtrialAmplitude = 3.5
         self.AtrialPulseWidth = 0.4
+        self.AtrialSensitivity = 0.5
         self.VentricularAmplitude = 3.5
         self.VentricularPulseWidth = 0.4
+        self.VentricularSensitivity = 0.5
         self.VRP = 320
         self.ARP = 250
         
@@ -138,6 +140,11 @@ class user():
             raise ValueError("Atrial pulse width is not within the correct range")
         self.AtrialPulseWidth = AtrialPulseWidth
 
+    def getAtrialSensitivity(self):
+        return self.AtrialSensitivity
+
+    #def setAtrialSensitivity(self, atrialSensitivity):
+
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
 
@@ -170,6 +177,11 @@ class user():
         if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
             raise ValueError("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
+
+    def getVentricularSensitivity(self):
+        return self.VentricularSensitivity
+    
+    #def setVentricularSensitivity(self, VentricularSensitivity):
 
     def getVRP(self):
         return self.VRP
