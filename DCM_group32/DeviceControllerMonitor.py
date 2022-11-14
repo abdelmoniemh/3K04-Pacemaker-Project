@@ -68,6 +68,7 @@ class DeviceControllerMonitor(QDialog):
         self.pacedComboBox.activated.connect(self.handleModeChange)
         self.sensedComboBox.activated.connect(self.handleModeChange)
         self.responseComboBox.activated.connect(self.handleModeChange)
+        self.rateModulationComboBox.activated.connect(self.handleModeChange)
         self.hideFields()
         self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
                                    + self.responseComboBox.currentText()[0]
@@ -113,7 +114,8 @@ class DeviceControllerMonitor(QDialog):
             "A": "A - Atrium",
             "I": "I - Inhibited",
             "T": "T - Triggered",
-            "D": "D - Dual"
+            "D": "D - Dual",
+            "R": "R - Rate Modulation"
         }
         self.pacedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[0]])
         self.sensedComboBox.setCurrentText(BychardiaSettingMap[self.user.getBradycardiaOperatingMode()[1]])
@@ -121,6 +123,7 @@ class DeviceControllerMonitor(QDialog):
         self.user.getBradycardiaOperatingMode()[1] == "D" \
             else "D - Tracked"
         self.responseComboBox.setCurrentText(responseBox)
+        self.rateModulationComboBox.setCurrentText(self.user.getBradycardiaOperatingMode()[3])
         self.handleModeChange()
 
     def saveToUser(self):
@@ -151,7 +154,8 @@ class DeviceControllerMonitor(QDialog):
     def handleModeChange(self):
         self.errorLabel.setText("")
         self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
-                                   + self.responseComboBox.currentText()[0]
+                   + self.responseComboBox.currentText()[0] + self.rateModulationComboBox.currentText()[0]
+
         def showRateLimits():
             self.lowerRateLimitLabel.setHidden(False)
             self.lowerRateLimitField.setHidden(False)
@@ -189,21 +193,21 @@ class DeviceControllerMonitor(QDialog):
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
-        elif self.tempBradycardiaMode in ['VVT', 'VVI', 'VDD']:
+        elif self.tempBradycardiaMode in ['VVTO', 'VVIO', 'VDDO']:
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
             showVrpParameters()
-        elif self.tempBradycardiaMode == 'VOO':
+        elif self.tempBradycardiaMode == 'VOOO':
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
-        elif self.tempBradycardiaMode == 'DOO':
+        elif self.tempBradycardiaMode == 'DOOO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showVentricularParameters()
-        elif self.tempBradycardiaMode in ['DDI', 'DDD']:
+        elif self.tempBradycardiaMode in ['DDIO', 'DDDO']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
