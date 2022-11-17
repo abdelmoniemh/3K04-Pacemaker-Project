@@ -98,6 +98,22 @@ class DeviceControllerMonitor(QDialog):
         self.MaxSensorRateField.setHidden(True)
         self.FixedAVdelayLabel.setHidden(True) 
         self.FixedAVdelayField.setHidden(True)
+        self.DynamicAVdelayLabel.setHidden(True) 
+        self.DynamicAVdelayField.setHidden(True)
+        self.AVdelayOffsetLabel.setHidden(True)
+        self.AVdelayOffsetField.setHidden(True)
+        self.pvarpLabel.setHidden(True)
+        self.pvarpField.setHidden(True)
+        self.pvarpExtensionLabel.setHidden(True)
+        self.pvarpExtensionField.setHidden(True)
+        self.hysteresisLabel.setHidden(True)
+        self.hysteresisField.setHidden(True)
+        self.RateSmoothingLabel.setHidden(True)
+        self.RateSmoothingField.setHidden(True)
+        self.ReactionTimeLabel.setHidden(True)
+        self.ReactionTimeField.setHidden(True)
+        self.ResponseFactorLabel.setHidden(True)
+        self.ResponseFactorField.setHidden(True)
 
     def setUser(self, user):
         self.user = user
@@ -116,6 +132,14 @@ class DeviceControllerMonitor(QDialog):
         self.arpField.setText(str(self.user.getARP()))
         self.MaxSensorRateField.setText(str(self.user.getMaxSensorRate()))
         self.FixedAVdelayField.setText(str(self.user.getFixedAVdelay()))
+        self.DynamicAVdelayField.setText(str(self.user.getDynamicAVdelay()))
+        self.AVdelayOffsetField.setText(str(self.user.getAVdelayOffset()))
+        self.pvarpField.setText(str(self.user.getPVARP()))
+        self.pvarpExtensionField.setText(str(self.user.getPVARPextension()))
+        self.hysteresisField.setText(str(self.user.getHysteresis()))
+        self.RateSmoothingField.setText(str(self.user.getRateSmoothing()))
+        self.ReactionTimeField.setText(str(self.user.getRateSmoothing()))
+        self.ResponseFactorField.setText(str(self.user.getResponseFactor()))
         BychardiaSettingMap = {
             "V": "V - Ventricle",
             "O": "O - None",
@@ -148,8 +172,16 @@ class DeviceControllerMonitor(QDialog):
             self.user.setVentricularSensitivity(self.ventricularSensitivityField.text())
             self.user.setVRP(self.vrpField.text())
             self.user.setARP(self.arpField.text())
-            self.user.MaxSensorRate(self.MaxSensorRateField.text())
-            self.user.FixedAVdelay(self.FixedAVdelayField.text())
+            self.user.setMaxSensorRate(self.MaxSensorRateField.text())
+            self.user.setFixedAVdelay(self.FixedAVdelayField.text())
+            self.user.setDynamicAVdelay(self.DynamicAVdelayField.text())
+            self.user.setAVdelayOffset(self.AVdelayOffsetField.text())
+            self.user.setPVARP(self.pvarpField.text())
+            self.user.setPVARPextension(self.pvarpExtensionField.text())
+            self.user.setHysteresis(self.hysteresisField.text())
+            self.user.setaRateSmoothing(self.RateSmoothingField.text())
+            self.user.setReactionTime(self.ReactionTimeField.text())
+            self.user.setResponseFactor(self.ResponseFactorField.text())
             self.user.setBradycardiaOperatingMode(self.tempBradycardiaMode)
             self.user.serialize()
         except Exception as e:
@@ -208,12 +240,45 @@ class DeviceControllerMonitor(QDialog):
             self.FixedAVdelayLabel.setHidden(False)
             self.FixedAVdelayField.setHidden(False)
 
+        def showDynamicAVdelay():
+            self.DynamicAVdelayLabel.setHidden(False)
+            self.DynamicAVdelayField.setHidden(False)
+
+        def showAVdelayOffset():
+            self.AVdelayOffsetLabel.setHidden(False)
+            self.AVdelayOffsetField.setHidden(False)
+
+        def showPVARP():
+            self.pvarpLabel.setHidden(False)
+            self.pvarpField.setHidden(False)
+
+        def showPVARPextension():
+            self.pvarpExtensionLabel.setHidden(False)
+            self.pvarpExtensionField.setHidden(False)
+
+        def showHysteresis():
+            self.hysteresisLabel.setHidden(False)
+            self.hysteresisField.setHidden(False)
+
+        def showRateSmoothing():
+            self.RateSmoothingLabel.setHidden(False)
+            self.RateSmoothingField.setHidden(False)
+
+        def showReactionTime():
+            self.ReactionTimeLabel.setHidden(False)
+            self.ReactionTimeField.setHidden(False)
+
+        def showResponseFactor():
+            self.ResponseFactorLabel.setHidden(False)
+            self.ResponseFactorField.setHidden(False)
+
         if self.tempBradycardiaMode == 'AATO':
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showArpParameters()
             showArtialSensitivity()
+            showPVARP()
         elif self.tempBradycardiaMode == 'VVTO':
             self.hideFields()
             showRateLimits()
@@ -230,6 +295,9 @@ class DeviceControllerMonitor(QDialog):
             showAtrialParameters()
             showArpParameters()
             showArtialSensitivity()
+            showPVARP()
+            showHysteresis()
+            showRateSmoothing()
         elif self.tempBradycardiaMode == 'VOOO':
             self.hideFields()
             showRateLimits()
@@ -240,6 +308,8 @@ class DeviceControllerMonitor(QDialog):
             showVentricularParameters()
             showVrpParameters()
             showVentricularSensitivity()
+            showHysteresis()
+            showRateSmoothing()
         elif self.tempBradycardiaMode == 'VDDO':
             self.hideFields()
             showRateLimits()
@@ -247,6 +317,9 @@ class DeviceControllerMonitor(QDialog):
             showVrpParameters()
             showVentricularSensitivity()
             showFixedAVdelay()
+            showDynamicAVdelay()
+            showPVARPextension()
+            showRateSmoothing()
         elif self.tempBradycardiaMode == 'DOOO':
             self.hideFields()
             showRateLimits()
@@ -263,6 +336,7 @@ class DeviceControllerMonitor(QDialog):
             showArtialSensitivity()
             showVentricularSensitivity()
             showFixedAVdelay()
+            showPVARP()
         elif self.tempBradycardiaMode == 'DDDO':
             self.hideFields()
             showRateLimits()
@@ -273,11 +347,19 @@ class DeviceControllerMonitor(QDialog):
             showArtialSensitivity()
             showVentricularSensitivity()
             showFixedAVdelay()
+            showDynamicAVdelay()
+            showAVdelayOffset()
+            showPVARP()
+            showPVARPextension()
+            showHysteresis()
+            showRateSmoothing()
         elif self.tempBradycardiaMode in ['AOOR']:
             self.hideFields()
             showRateLimits()
             showAtrialParameters()
             showMaxSensorRate()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['AAIR']:
             self.hideFields()
             showRateLimits()
@@ -285,11 +367,18 @@ class DeviceControllerMonitor(QDialog):
             showArpParameters()
             showArtialSensitivity()
             showMaxSensorRate()
+            showPVARP()
+            showHysteresis()
+            showRateSmoothing()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['VOOR']:
             self.hideFields()
             showRateLimits()
             showVentricularParameters()
             showMaxSensorRate()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['VVIR']:
             self.hideFields()
             showRateLimits()
@@ -297,6 +386,10 @@ class DeviceControllerMonitor(QDialog):
             showVrpParameters()
             showVentricularSensitivity()
             showMaxSensorRate()
+            showHysteresis()
+            showRateSmoothing()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['VDDR']:
             self.hideFields()
             showRateLimits()
@@ -305,6 +398,11 @@ class DeviceControllerMonitor(QDialog):
             showVentricularSensitivity()
             showMaxSensorRate()
             showFixedAVdelay()
+            showDynamicAVdelay()
+            showPVARPextension()
+            showRateSmoothing()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['DOOR']:
             self.hideFields()
             showRateLimits()
@@ -312,6 +410,8 @@ class DeviceControllerMonitor(QDialog):
             showVentricularParameters()
             showMaxSensorRate()
             showFixedAVdelay()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['DDIR']:
             self.hideFields()
             showRateLimits()
@@ -323,6 +423,9 @@ class DeviceControllerMonitor(QDialog):
             showVentricularSensitivity()
             showMaxSensorRate()
             showFixedAVdelay()
+            showPVARP()
+            showReactionTime()
+            showResponseFactor()
         elif self.tempBradycardiaMode in ['DDDR']:
             self.hideFields()
             showRateLimits()
@@ -334,6 +437,14 @@ class DeviceControllerMonitor(QDialog):
             showVentricularSensitivity()
             showMaxSensorRate()
             showFixedAVdelay()
+            showDynamicAVdelay()
+            showAVdelayOffset()
+            showPVARP()
+            showPVARPextension()
+            showHysteresis()
+            showRateSmoothing()
+            showReactionTime()
+            showResponseFactor()
         else:
             self.hideFields()
             print(f"{self.tempBradycardiaMode} is an invalid Bradycardia Operating Mode")

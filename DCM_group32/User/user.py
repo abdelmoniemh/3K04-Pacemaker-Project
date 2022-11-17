@@ -48,8 +48,15 @@ class user():
         self.ARP = 250
         self.MaxSensorRate = 100
         self.FixedAVdelay = 150
+        self.DynamicAVdelay = 60
+        self.AVdelayOffset = -55
+        self.PVARP = 300
+        self.PVARPextension = 200
+        self.Hysteresis = 60
+        self.RateSmoothing = 12
+        self.ReationTime = 25
+        self.ResponseFactor = 10
         
-
     def serialize(self):
         # store user data in txt files in directory/db
         toBeSerialized = dict()
@@ -145,7 +152,17 @@ class user():
     def getAtrialSensitivity(self):
         return self.AtrialSensitivity
 
-    #def setAtrialSensitivity(self, atrialSensitivity):
+    #def setAtrialSensitivity(self, AtrialSensitivity):
+    #    # 0.25, 0.5, 0.75, 1-10mV
+    #    try:
+    #        AtrialSensitivity = float(AtrialSensitivity)
+    #    except:
+    #        raise TypeError("Atrial sensitivity must be a float")
+    #  
+    #    if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
+    #        if(AtrialSensitivity < 1 or AtrialSensitivity > 10):
+    #            raise ValueError("Atrial sensitivity is not within the correct range")
+    #    self.AtrialSensitivity = AtrialSensitivity
 
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
@@ -222,3 +239,43 @@ class user():
         return self.FixedAVdelay
 
     #def setFixedAVdelay(self, FixedAVdelay):
+
+    def getDynamicAVdelay(self):
+        return self.DynamicAVdelay
+
+    #def setDynamicAVdelay(self, DynamicAVdelay):
+
+    def getAVdelayOffset(self):
+        return self.AVdelayOffset
+
+    #def setAVdelayOffset(self, AVdelayOffset):
+
+    def getPVARP(self):
+        return self.PVARP
+
+    #def setPVARP(self, PVARP)
+
+    def getPVARPextension(self):
+        return self.PVARPextension
+    
+    #def setPVARPextension(self, PVARPextension):
+
+    def getHysteresis(self):
+        return self.Hysteresis
+
+    #def setHysteresis(self, Hysteresis):
+
+    def getRateSmoothing(self):
+        return self.RateSmoothing
+
+    #def setRateSmoothing(self, RateSmoothing):
+
+    def getReactionTime(self):
+        return self.ReationTime
+
+    #def setReationTime(self, ReationTime):
+
+    def getResponseFactor(self):
+        return self.ResponseFactor
+
+    #def setResponseFactor(self, ResponseFactor):
