@@ -58,6 +58,11 @@ class user():
         self.RateSmoothing = 12
         self.ReationTime = 25
         self.ResponseFactor = 10
+        self.RecoveryTime = 8
+        self.ActivityThreshold = "Med"
+        self.ATRmode = 1
+        self.ATRtime = 3 
+        self.ATRduration = 70
         
     def serialize(self):
         # store user data in txt files in directory/db
@@ -156,6 +161,7 @@ class user():
             LowerRateLimit = int(LowerRateLimit)
         except:
             raise TypeError("Lower Rate Limit must be a integer")
+       
         if LowerRateLimit < 30 or LowerRateLimit > 175:
             raise ValueError("Lower Rate limit is not within the correct range")
         self.LowerRateLimit = LowerRateLimit
@@ -169,6 +175,7 @@ class user():
             UpperRateLimit = int(UpperRateLimit)
         except:
             raise TypeError("Upper Rate Limit must be a integer")
+        
         if UpperRateLimit < 50 or UpperRateLimit > 175:
             raise ValueError("Upper rate limit is not within the correct range")
         self.UpperRateLimit = UpperRateLimit
@@ -209,17 +216,17 @@ class user():
     def getAtrialSensitivity(self):
         return self.AtrialSensitivity
 
-    #def setAtrialSensitivity(self, AtrialSensitivity):
-    #    # 0.25, 0.5, 0.75, 1-10mV
-    #    try:
-    #        AtrialSensitivity = float(AtrialSensitivity)
-    #    except:
-    #        raise TypeError("Atrial sensitivity must be a float")
-    #  
-    #    if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
-    #        if(AtrialSensitivity < 1 or AtrialSensitivity > 10):
-    #            raise ValueError("Atrial sensitivity is not within the correct range")
-    #    self.AtrialSensitivity = AtrialSensitivity
+    def setAtrialSensitivity(self, AtrialSensitivity):
+        # 0.25, 0.5, 0.75, 1-10mV
+        try:
+            AtrialSensitivity = float(AtrialSensitivity)
+        except:
+            raise TypeError("Atrial sensitivity must be a float")
+     
+        if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
+            if(AtrialSensitivity < 1 or AtrialSensitivity > 10):
+                raise ValueError("Atrial sensitivity is not within the correct range")
+        self.AtrialSensitivity = AtrialSensitivity
 
     def getVentricularAmplitude(self):
         return self.VentricularAmplitude
@@ -257,7 +264,17 @@ class user():
     def getVentricularSensitivity(self):
         return self.VentricularSensitivity
     
-    #def setVentricularSensitivity(self, VentricularSensitivity):
+    def setVentricularSensitivity(self, VentricularSensitivity):
+        # 0.25, 0.5, 0.75, 1-10mV
+        try:
+            VentricularSensitivity = float(VentricularSensitivity)
+        except:
+            raise TypeError("Ventricular sensitivity must be a float")
+     
+        if VentricularSensitivity!= 0.25 and VentricularSensitivity!= 0.5 and VentricularSensitivity!= 0.75:
+            if(VentricularSensitivity < 1 or VentricularSensitivity > 10):
+                raise ValueError("Ventricular sensitivity is not within the correct range")
+        self.VentricularSensitivity = VentricularSensitivity
 
     def getVRP(self):
         return self.VRP
@@ -290,49 +307,214 @@ class user():
     def getMaxSensorRate(self):
         return self.MaxSensorRate
     
-    #def setMaxSensorRate(self, MaxSensorRate):
+    def setMaxSensorRate(self, MaxSensorRate):
+        # 50-175ppm
+        try:
+            MaxSensorRate = int(MaxSensorRate)
+        except:
+            raise TypeError("Max sensor rate must be a integer")
+
+        if MaxSensorRate < 50 or MaxSensorRate > 175:
+            raise ValueError("Max sensor rate is not within the correct range")
+        self.MaxSensorRate = MaxSensorRate
 
     def getFixedAVdelay(self):
         return self.FixedAVdelay
 
-    #def setFixedAVdelay(self, FixedAVdelay):
+    def setFixedAVdelay(self, FixedAVdelay):
+        # 70-300ms
+        try:
+            FixedAVdelay = int(FixedAVdelay)
+        except:
+            raise TypeError("Fixed AV delay must be a integer")
+
+        if FixedAVdelay < 70 or FixedAVdelay > 300:
+            raise ValueError("Fixed AV delay is not within the correct range")
+        self.FixedAVdelay = FixedAVdelay
 
     def getDynamicAVdelay(self):
         return self.DynamicAVdelay
 
-    #def setDynamicAVdelay(self, DynamicAVdelay):
+    def setDynamicAVdelay(self, DynamicAVdelay):
+        # 30-100ms                                   #on and off??
+        try:
+            DynamicAVdelay = int(DynamicAVdelay)
+        except:
+            raise TypeError("Dynamic AV delay must be a integer")
+        
+        if DynamicAVdelay < 30 or DynamicAVdelay > 100:
+            raise ValueError("Dynamic AV delay is not within the correct range")
+        self.DynamicAVdelay = DynamicAVdelay
 
     def getAVdelayOffset(self):
         return self.AVdelayOffset
 
-    #def setAVdelayOffset(self, AVdelayOffset):
+    def setAVdelayOffset(self, AVdelayOffset):
+        # off(0) and -10 to -100ms                                   
+        try:
+            AVdelayOffset = int(AVdelayOffset)
+        except:
+            raise TypeError("AV delay offset must be a integer")
+        
+        if AVdelayOffset != 0:
+            if AVdelayOffset < -100 or AVdelayOffset > -10:
+                raise ValueError("AV delay offset is not within the correct range")
+        self.AVdelayOffset = AVdelayOffset
 
     def getPVARP(self):
         return self.PVARP
 
-    #def setPVARP(self, PVARP)
+    def setPVARP(self, PVARP):
+        # 150-500ms                                   
+        try:
+            PVARP = int(PVARP)
+        except:
+            raise TypeError("PVARP must be a integer")
+        
+        if PVARP < 150 or PVARP > 500:
+            raise ValueError("PVARP is not within the correct range")
+        self.PVARP = PVARP
 
     def getPVARPextension(self):
         return self.PVARPextension
     
-    #def setPVARPextension(self, PVARPextension):
+    def setPVARPextension(self, PVARPextension):
+        # off(0) and 50-400ms                                   
+        try:
+            PVARPextension = int(PVARPextension)
+        except:
+            raise TypeError("PVARP extension must be a integer")
+        
+        if PVARPextension != 0:
+            if PVARPextension < 50 or PVARPextension > 400:
+                raise ValueError("PVARPextension is not within the correct range")
+        self.PVARPextension = PVARPextension
 
     def getHysteresis(self):
         return self.Hysteresis
 
-    #def setHysteresis(self, Hysteresis):
+    def setHysteresis(self, Hysteresis):
+        # off and 30-175 ppm
+        try:
+            Hysteresis = int(Hysteresis)
+        except:
+            raise TypeError("Hysteresis must be a integer")
+        
+        if Hysteresis != 0:
+            if Hysteresis < 30 or Hysteresis > 175:
+                raise ValueError("Hysteresis is not within the correct range")
+        self.Hysteresis = Hysteresis
 
     def getRateSmoothing(self):
         return self.RateSmoothing
 
-    #def setRateSmoothing(self, RateSmoothing):
+    def setRateSmoothing(self, RateSmoothing):
+        # off(0), 0.25, 3, 6, 9, 12, 15, 18, 21
+        try:
+            RateSmoothing = float(RateSmoothing)
+        except:
+            raise TypeError("Rate smoothing must be a float")
+     
+        if RateSmoothing!= 0 and RateSmoothing!= 0.25 and RateSmoothing!= 3 and RateSmoothing!= 6 and RateSmoothing!= 9 and RateSmoothing!= 12 and RateSmoothing!= 15 and RateSmoothing!= 18 and RateSmoothing!= 21:
+            raise ValueError("Rate smoothing is not within the correct range")
+        self.RateSmoothing = RateSmoothing
 
     def getReactionTime(self):
         return self.ReationTime
 
-    #def setReationTime(self, ReationTime):
+    def setReationTime(self, ReationTime):
+        # 10-50s                                   
+        try:
+            ReationTime = int(ReationTime)
+        except:
+            raise TypeError("Reation time must be a integer")
+        
+        if ReationTime < 10 or ReationTime > 50:
+            raise ValueError("Reation time is not within the correct range")
+        self.ReationTime = ReationTime
 
     def getResponseFactor(self):
         return self.ResponseFactor
 
-    #def setResponseFactor(self, ResponseFactor):
+    def setResponseFactor(self, ResponseFactor):
+        # 1-16                                 
+        try:
+            ResponseFactor = int(ResponseFactor)
+        except:
+            raise TypeError("Response factor must be a integer")
+        
+        if ResponseFactor < 1 or ResponseFactor > 16:
+            raise ValueError("Response factor is not within the correct range")
+        self.ResponseFactor = ResponseFactor
+
+    def getRecoveryTime(self):
+        return self.RecoveryTime
+
+    def setRecoveryTime(self, RecoveryTime):
+        # 2-16 min                                
+        try:
+            RecoveryTime = int(RecoveryTime)
+        except:
+            raise TypeError("Recovery time must be a integer")
+        
+        if RecoveryTime < 2 or RecoveryTime > 16:
+            raise ValueError("Recovery time is not within the correct range")
+        self.RecoveryTime = RecoveryTime
+
+    def getActivityThreshold(self):
+         return self.ActivityThreshold
+
+    def setActivityThreshold(self, ActivityThreshold: str):
+        # V-Low, Low, Med-Low, Med, Med-High, High, V-High
+        try:
+            ActivityThreshold = str(ActivityThreshold)
+        except:
+            raise TypeError("Activity threshold must be a string")
+     
+        if ActivityThreshold != "V-Low" and ActivityThreshold != "Low" and ActivityThreshold != "Med-Low" and ActivityThreshold != "Med" and ActivityThreshold != "Med-High" and ActivityThreshold != "High" and ActivityThreshold != "V-High":
+            raise ValueError("Activity threshold does not match a given mode")
+        self.ActivityThreshold = ActivityThreshold
+
+    def getATRmode(self):
+        return self.ATRmode
+
+    def setATRmode(self, ATRmode):
+        # on or off (1 or 0)
+        try:
+            ATRmode = int(ATRmode)
+        except:
+            raise TypeError("ATR Fallback Mode must be a integer")
+        
+        if ATRmode != 1 and ATRmode != 0:
+            raise ValueError("ATR Fallback Mode is not working")
+        self.ATRmode = ATRmode
+   
+    def getATRtime(self):
+        return self.ATRtime
+
+    def setATRtime(self, ATRtime):
+        # 1-5 min                                
+        try:
+            ATRtime = int(ATRtime)
+        except:
+            raise TypeError("ATR time must be a integer")
+        
+        if ATRtime < 1 or ATRtime > 5:
+            raise ValueError("ATR time is not within the correct range")
+        self.ATRtime = ATRtime
+
+    def getATRduration(self):
+        return self.ATRduration
+
+    def setATRduration(self, ATRduration):
+        # 10 and 20-80 and 100-2000
+        try:
+            ATRduration = int(ATRduration)
+        except:
+            raise TypeError("ATR duration must be a integer")
+        
+        if ATRduration != 10:
+            if ATRduration < 20 or ATRduration > 80:
+                if ATRduration < 100 or ATRduration > 2000:
+                    raise ValueError("ATR duration is not within the correct range")
+        self.ATRduration = ATRduration

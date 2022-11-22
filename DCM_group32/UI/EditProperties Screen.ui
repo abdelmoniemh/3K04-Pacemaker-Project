@@ -102,15 +102,69 @@
         <x>10</x>
         <y>10</y>
         <width>651</width>
-        <height>372</height>
+        <height>456</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
        </property>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="sensedComboBox">
+       <item row="11" column="2">
+        <widget class="QLabel" name="AVdelayOffsetLabel">
+         <property name="text">
+          <string>Sensed AV Delay Offset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="atrialPulseWidthField"/>
+       </item>
+       <item row="0" column="3">
+        <widget class="QLabel" name="rateModulationLabel">
+         <property name="text">
+          <string>Rate Modulation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="3">
+        <widget class="QLineEdit" name="RateSmoothingField"/>
+       </item>
+       <item row="14" column="3">
+        <widget class="QLineEdit" name="ResponseFactorField"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QLabel" name="ventricularAmplitudeLabel">
+         <property name="text">
+          <string> Ventricular Amplitude: </string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="2">
+        <widget class="QLabel" name="ActivityThresholdLabel">
+         <property name="text">
+          <string>    Activity Threshold:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="3">
+        <widget class="QLineEdit" name="ActivityThresholdField"/>
+       </item>
+       <item row="0" column="4">
+        <widget class="QPushButton" name="saveAllButton">
+         <property name="text">
+          <string>Save All</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="2">
+        <widget class="QLabel" name="FixedAVdelayLabel">
+         <property name="text">
+          <string>       Fixed AV Delay:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QComboBox" name="rateModulationComboBox">
          <item>
           <property name="text">
            <string>O - None</string>
@@ -118,17 +172,77 @@
          </item>
          <item>
           <property name="text">
-           <string>A - Atrium</string>
+           <string>R - Rate Modulation</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="9" column="3">
+        <widget class="QLineEdit" name="vrpField"/>
+       </item>
+       <item row="4" column="3">
+        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
+       </item>
+       <item row="4" column="2">
+        <widget class="QLabel" name="ventricularPulseWidthLabel">
+         <property name="text">
+          <string>Ventricular Pulse Width:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="15" column="1">
+        <widget class="QLineEdit" name="RecoveryTimeField"/>
+       </item>
+       <item row="16" column="2">
+        <widget class="QLabel" name="atrTimeLabel">
+         <property name="text">
+          <string>           ATR Time:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="upperRateLimitLabel">
+         <property name="text">
+          <string>Upper Rate Limit</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="3">
+        <widget class="QLineEdit" name="atrTimeField"/>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="atrialAmplitudeField"/>
+       </item>
+       <item row="12" column="3">
+        <widget class="QLineEdit" name="pvarpExtensionField"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="chambersPacedLabel">
+         <property name="text">
+          <string>Chambers Paced</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QComboBox" name="responseComboBox">
+         <item>
+          <property name="text">
+           <string>O - None</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>V - Ventricle</string>
+           <string>T - Triggered</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>D - Dual</string>
+           <string>I - Inhibited</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>D - Tracked</string>
           </property>
          </item>
         </widget>
@@ -140,19 +254,45 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="ventricularAmplitudeLabel">
-         <property name="text">
-          <string> Ventricular Amplitude: </string>
-         </property>
-        </widget>
-       </item>
        <item row="10" column="0">
         <widget class="QLabel" name="MaxSensorRateLabel">
          <property name="text">
           <string> Max. Sensor Rate:</string>
          </property>
         </widget>
+       </item>
+       <item row="11" column="1">
+        <widget class="QLineEdit" name="DynamicAVdelayField"/>
+       </item>
+       <item row="13" column="1">
+        <widget class="QLineEdit" name="hysteresisField"/>
+       </item>
+       <item row="3" column="0" alignment="Qt::AlignHCenter">
+        <widget class="QLabel" name="atrialAmplitudeLabel">
+         <property name="text">
+          <string>Atrial Amplitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="lowerRateLimitField"/>
+       </item>
+       <item row="11" column="0">
+        <widget class="QLabel" name="DynamicAVdelayLabel">
+         <property name="text">
+          <string> Dynamic AV Delay:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="0">
+        <widget class="QLabel" name="atrModeLabel">
+         <property name="text">
+          <string>        ATR Mode:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="atrialSensitivityField"/>
        </item>
        <item row="1" column="0">
         <widget class="QComboBox" name="pacedComboBox">
@@ -188,23 +328,61 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="3">
-        <widget class="QLineEdit" name="FixedAVdelayField"/>
-       </item>
-       <item row="11" column="3">
-        <widget class="QLineEdit" name="AVdelayOffsetField"/>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="ventricularPulseWidthLabel">
+       <item row="15" column="0">
+        <widget class="QLabel" name="RecoveryTimeLabel">
          <property name="text">
-          <string>Ventricular Pulse Width:</string>
+          <string>   Recovery Time:</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="2" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="upperRateLimitLabel">
+       <item row="3" column="3">
+        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="sensedComboBox">
+         <item>
+          <property name="text">
+           <string>O - None</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>A - Atrium</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>V - Ventricle</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>D - Dual</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="18" column="0" colspan="5">
+        <widget class="QLabel" name="errorLabel">
          <property name="text">
-          <string>Upper Rate Limit</string>
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="2">
+        <widget class="QLabel" name="pvarpExtensionLabel">
+         <property name="text">
+          <string>      PVARP Extension:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="14" column="1">
+        <widget class="QLineEdit" name="ReactionTimeField"/>
+       </item>
+       <item row="14" column="0">
+        <widget class="QLabel" name="ReactionTimeLabel">
+         <property name="text">
+          <string>   Reaction Time:</string>
          </property>
         </widget>
        </item>
@@ -215,73 +393,6 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="3">
-        <widget class="QLineEdit" name="ventricularSensitivityField"/>
-       </item>
-       <item row="9" column="1">
-        <widget class="QLineEdit" name="arpField"/>
-       </item>
-       <item row="11" column="2">
-        <widget class="QLabel" name="AVdelayOffsetLabel">
-         <property name="text">
-          <string>Sensed AV Delay Offset:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QLineEdit" name="ventricularAmplitudeField"/>
-       </item>
-       <item row="2" column="3">
-        <widget class="QLineEdit" name="upperRateLimitField"/>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLabel" name="rateModulationLabel">
-         <property name="text">
-          <string>Rate Modulation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="atrialPulseWidthField"/>
-       </item>
-       <item row="1" column="3">
-        <widget class="QComboBox" name="rateModulationComboBox">
-         <item>
-          <property name="text">
-           <string>O - None</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>R - Rate Modulation</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="3" column="0" alignment="Qt::AlignHCenter">
-        <widget class="QLabel" name="atrialAmplitudeLabel">
-         <property name="text">
-          <string>Atrial Amplitude:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="1">
-        <widget class="QLineEdit" name="hysteresisField"/>
-       </item>
-       <item row="13" column="2">
-        <widget class="QLabel" name="RateSmoothingLabel">
-         <property name="text">
-          <string>       Rate Smoothing:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="4">
-        <widget class="QPushButton" name="resetButton">
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
-       </item>
        <item row="12" column="0">
         <widget class="QLabel" name="pvarpLabel">
          <property name="text">
@@ -289,64 +400,11 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="3">
-        <widget class="QLineEdit" name="ventricularPulseWidthField"/>
+       <item row="5" column="3">
+        <widget class="QLineEdit" name="ventricularSensitivityField"/>
        </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="lowerRateLimitField"/>
-       </item>
-       <item row="11" column="0">
-        <widget class="QLabel" name="DynamicAVdelayLabel">
-         <property name="text">
-          <string> Dynamic AV Delay:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="atrialSensitivityLabel">
-         <property name="text">
-          <string>  Atrial Sensitivity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="1">
-        <widget class="QLineEdit" name="pvarpField"/>
-       </item>
-       <item row="0" column="4">
-        <widget class="QPushButton" name="saveAllButton">
-         <property name="text">
-          <string>Save All</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="3">
-        <widget class="QLineEdit" name="vrpField"/>
-       </item>
-       <item row="11" column="1">
-        <widget class="QLineEdit" name="DynamicAVdelayField"/>
-       </item>
-       <item row="15" column="0" colspan="5">
-        <widget class="QLabel" name="errorLabel">
-         <property name="text">
-          <string>TextLabel</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="1">
-        <widget class="QLineEdit" name="MaxSensorRateField"/>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="ventricularSensitivityLabel">
-         <property name="text">
-          <string> Ventricular Sensitivity:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="atrialAmplitudeField"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="atrialSensitivityField"/>
+       <item row="2" column="3">
+        <widget class="QLineEdit" name="upperRateLimitField"/>
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="chambersSensedLabel">
@@ -362,10 +420,53 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="2">
-        <widget class="QLabel" name="FixedAVdelayLabel">
+       <item row="0" column="2">
+        <widget class="QLabel" name="rtsLabel">
          <property name="text">
-          <string>       Fixed AV Delay:</string>
+          <string>Response to Sensing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="16" column="1">
+        <widget class="QLineEdit" name="atrModeField"/>
+       </item>
+       <item row="11" column="3">
+        <widget class="QLineEdit" name="AVdelayOffsetField"/>
+       </item>
+       <item row="10" column="3">
+        <widget class="QLineEdit" name="FixedAVdelayField"/>
+       </item>
+       <item row="10" column="1">
+        <widget class="QLineEdit" name="MaxSensorRateField"/>
+       </item>
+       <item row="5" column="2">
+        <widget class="QLabel" name="ventricularSensitivityLabel">
+         <property name="text">
+          <string> Ventricular Sensitivity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="13" column="2">
+        <widget class="QLabel" name="RateSmoothingLabel">
+         <property name="text">
+          <string>       Rate Smoothing:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="12" column="1">
+        <widget class="QLineEdit" name="pvarpField"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="atrialSensitivityLabel">
+         <property name="text">
+          <string>  Atrial Sensitivity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="4">
+        <widget class="QPushButton" name="resetButton">
+         <property name="text">
+          <string>Reset</string>
          </property>
         </widget>
        </item>
@@ -376,67 +477,6 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="chambersPacedLabel">
-         <property name="text">
-          <string>Chambers Paced</string>
-         </property>
-        </widget>
-       </item>
-       <item row="12" column="3">
-        <widget class="QLineEdit" name="pvarpExtensionField"/>
-       </item>
-       <item row="12" column="2">
-        <widget class="QLabel" name="pvarpExtensionLabel">
-         <property name="text">
-          <string>      PVARP Extension:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="rtsLabel">
-         <property name="text">
-          <string>Response to Sensing</string>
-         </property>
-        </widget>
-       </item>
-       <item row="13" column="3">
-        <widget class="QLineEdit" name="RateSmoothingField"/>
-       </item>
-       <item row="1" column="2">
-        <widget class="QComboBox" name="responseComboBox">
-         <item>
-          <property name="text">
-           <string>O - None</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>T - Triggered</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>I - Inhibited</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>D - Tracked</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item row="14" column="0">
-        <widget class="QLabel" name="ReactionTimeLabel">
-         <property name="text">
-          <string>   Reaction Time:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="14" column="1">
-        <widget class="QLineEdit" name="ReactionTimeField"/>
-       </item>
        <item row="14" column="2">
         <widget class="QLabel" name="ResponseFactorLabel">
          <property name="text">
@@ -444,10 +484,20 @@
          </property>
         </widget>
        </item>
-       <item row="14" column="3">
-        <widget class="QLineEdit" name="ResponseFactorField"/>
+       <item row="9" column="1">
+        <widget class="QLineEdit" name="arpField"/>
        </item>
-       <item row="14" column="4">
+       <item row="17" column="0">
+        <widget class="QLabel" name="atrDurationLabel">
+         <property name="text">
+          <string>     ATR Duration:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="17" column="1">
+        <widget class="QLineEdit" name="atrDurationField"/>
+       </item>
+       <item row="17" column="4">
         <widget class="QPushButton" name="logoutButton">
          <property name="text">
           <string>Log out</string>
