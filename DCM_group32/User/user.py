@@ -2,6 +2,8 @@ from ssl import VerifyFlags
 from passlib.hash import sha256_crypt
 import json
 import os
+import serial
+import struct
 
 #if on linux or macos make sure "TMPDIR" env variable is set
 #os.environ["TMPDIR"] = "/home/tempdir" #for linux
@@ -78,6 +80,61 @@ class user():
             if not sha256_crypt.verify(password, self.password):
                 raise KeyError #wrong password, catch and retry on gui side
         self.instanceCount = len([file for file in os.listdir(self.appUserDirectory) if file.endswith(".json")])
+
+    def setParameterOnBoard(self, parameterName, parameter):
+        typeDictionary = {
+            float : "f",
+            int : "i"
+        }
+        parameterDictionary = {
+            "BradycardiaOperatingMode": b'x\00000',
+            "LowerRateLimit": b'x\00001',
+            "UpperRateLimit": b'x\00010',
+            "AtrialAmplitude": b'x\00011',
+            "AtrialPulseWidth":b'x\00100',
+            "AtrialSensitivity":b'x\00101',
+            "VentricularAmplitude":b'x\00110',
+            "VentricularPulseWidth":b'x\00111',
+            "VentricularSensitivity":b'x\01000',
+            "VRP":b'x\01001',
+            "ARP":b'x\01010',
+            "MaxSensorRate":b'x\01011',
+            "FixedAVdelay":b'x\01100',
+            "DynamicAVdelay":b'x\01101',
+            "AVdelayOffset":b'x\01110',
+            "PVARP":b'x\01111',
+            "PVARPextension":b'x\10000',
+            "Hysteresis":b'x\10001',
+            "RateSmoothing":b'x\10010',
+            "ReationTime":b'x\10011',
+            "ResponseFactor":b'x\10100',
+        }
+        toWrite = b'x\16' + b'x\22' + b'x\55'
+        #toWrite = bytes()
+        if parameterName not in parameterDictionary.keys():
+            return False
+        if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
+            toWrite += parameterDictionary[parameterName]
+            for char in parameter:
+                toWrite += struct.pack("c", bytes(char.encode()))
+            print(f"parameterName = {parameterName}, {toWrite}")
+        else:
+            toWrite += parameterDictionary[parameterName] + struct.pack(typeDictionary[type(parameter)], parameter)
+            print(f"parameterName = {parameterName}, {toWrite}")
+        with serial.Serial('COM3',
+                     baudrate=115200,
+                     bytesize=serial.EIGHTBITS,
+                     parity=serial.PARITY_NONE) as pacemaker:
+           pacemaker.write(toWrite)
+        return True
+
+
+    def writeParamtersToBoard(self):
+        status = []
+        for name, value in self.__dict__.items():
+            written = self.setParameterOnBoard(name, value)
+            status.append((name, written))
+        return status
 
     def getAllAttributes(self):
         return self.__dict__.items()

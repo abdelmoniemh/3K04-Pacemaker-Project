@@ -13,6 +13,10 @@ class testUserClass(unittest.TestCase):
         assert(testCreateNewUser.getVentricularPulseWidth() == testCreateNewUserDeserialized.getVentricularPulseWidth())
         assert(not (testCreateNewUser.getVentricularPulseWidth() == testCreateDifferentUser.getVentricularPulseWidth()))
 
+    def testWriteParameters(self):
+        User = user("username", "password", "/serialtest")
+        User.serialize()
+        User.writeParamtersToBoard()
 
 if __name__ == '__main__':
     unittest.main()
