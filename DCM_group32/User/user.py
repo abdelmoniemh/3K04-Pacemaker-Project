@@ -422,16 +422,16 @@ class user():
     def getReactionTime(self):
         return self.ReationTime
 
-    def setReationTime(self, ReationTime):
+    def setReactionTime(self, ReactionTime):
         # 10-50s                                   
         try:
-            ReationTime = int(ReationTime)
+            ReactionTime = int(ReactionTime)
         except:
-            raise TypeError("Reation time must be a integer")
+            raise TypeError("Reaction time must be a integer")
         
-        if ReationTime < 10 or ReationTime > 50:
-            raise ValueError("Reation time is not within the correct range")
-        self.ReationTime = ReationTime
+        if ReactionTime < 10 or ReactionTime > 50:
+            raise ValueError("Reaction time is not within the correct range")
+        self.ReactionTime = ReactionTime
 
     def getResponseFactor(self):
         return self.ResponseFactor
