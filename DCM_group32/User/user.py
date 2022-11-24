@@ -18,13 +18,18 @@ class user():
     instanceCount = len([file for file in os.listdir(appUserDirectory) if file.endswith(".json")])
 
     def __init__(self, username, password, subDirectory=""):
+        if not username.isalnum():
+            raise ValueError("Username can only contain letters or numbers.")
+        if not password.isalnum():
+            raise ValueError("Password can only contain letters or numbers.")
         self.createAttributes(username, password)
         self.subDirectory = subDirectory
         self.appUserDirectory += self.subDirectory
         userPath = os.path.join(self.appUserDirectory, f"{username}.json")
         if (not os.path.exists(userPath)):       
             if (self.instanceCount + 1 > 10):
-                raise ValueError #too many users to create a new one, catch and handle in gui code
+                raise ValueError("Sign Up Failed: The max amount of users has been hit.\n \
+                                        Delete users before creating more.") #too many users to create a new one, catch and handle in gui code
             else:
                 self.instanceCount += 1
                 self.serialize()
@@ -114,23 +119,25 @@ class user():
             "ReationTime":b'x\10011',
             "ResponseFactor":b'x\10100',
         }
-        toWrite = b'x\16' + b'x\22' + b'x\55'
+        toWrite = b'x\16' + b'x\55' #  + b'x\22'
         #toWrite = bytes()
         if parameterName not in parameterDictionary.keys():
             return False
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
             toWrite += parameterDictionary[parameterName]
+            i = 0
             for char in parameter:
+                i+=1
                 toWrite += struct.pack("c", bytes(char.encode()))
-            print(f"parameterName = {parameterName}, {toWrite}")
+            print(f"parameterName = {parameterName}, {toWrite}, len = {i}")
         else:
             toWrite += parameterDictionary[parameterName] + struct.pack(typeDictionary[type(parameter)], parameter)
-            print(f"parameterName = {parameterName}, {toWrite}")
-        with serial.Serial('COM3',
-                     baudrate=115200,
-                     bytesize=serial.EIGHTBITS,
-                     parity=serial.PARITY_NONE) as pacemaker:
-           pacemaker.write(toWrite)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
+        #with serial.Serial('COM3',
+        #             baudrate=115200,
+        #             bytesize=serial.EIGHTBITS,
+        #             parity=serial.PARITY_NONE) as pacemaker:
+        #   pacemaker.write(toWrite)
         return True
 
 

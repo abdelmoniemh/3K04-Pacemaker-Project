@@ -28,10 +28,8 @@ class loginScreen(QMainWindow):
                     print("Username cannot be empty")
                     self.errorLabel.setText("Username cannot be empty")
                 elif (type(e) == ValueError):  # Too many users to create new one
-                    print("Sign Up Failed: The max amount of users has been hit.\n \
-                                        Delete users before creating more.")
-                    self.errorLabel.setText("Sign Up Failed: The max amount of users has been hit.\n \
-                    Delete users before creating more.")
+                    print(str(e))
+                    self.errorLabel.setText(str(e))
                 elif (type(e) == KeyError):  # Wrong password
                     print("Login Failed: Wrong Password")
                     self.errorLabel.setText("Login Failed: Wrong Password")
