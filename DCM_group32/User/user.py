@@ -162,8 +162,10 @@ class user():
         except:
             raise TypeError("Lower Rate Limit must be a integer")
        
-        if LowerRateLimit < 30 or LowerRateLimit > 175:
-            raise ValueError("Lower Rate limit is not within the correct range")
+        if (LowerRateLimit < 30 or LowerRateLimit > 50) or LowerRateLimit not in range(30,51,5):
+            if LowerRateLimit < 50 or LowerRateLimit > 90:
+                if (LowerRateLimit < 90 or LowerRateLimit > 175) or LowerRateLimit not in range(90,176,5):
+                    raise ValueError("Lower Rate limit is not within the correct range")
         self.LowerRateLimit = LowerRateLimit
 
     def getUpperRateLimit(self):
@@ -176,7 +178,7 @@ class user():
         except:
             raise TypeError("Upper Rate Limit must be a integer")
         
-        if UpperRateLimit < 50 or UpperRateLimit > 175:
+        if (UpperRateLimit < 50 or UpperRateLimit > 175) or UpperRateLimit not in range(50,176,5):
             raise ValueError("Upper rate limit is not within the correct range")
         self.UpperRateLimit = UpperRateLimit
 
@@ -190,13 +192,14 @@ class user():
         except:
             raise TypeError("Atrial Amplitude must be a float")
         
-        if AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2:
-            if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
-                raise ValueError("Atrial amplitude is not within the correct ranges")
-        
+        if (AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2) or AtrialAmplitude not in range(0.5,3.3,0.1):
+            if AtrialAmplitude not in range(3.5,7,0.5):
+                if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
+                    raise ValueError("Atrial amplitude is not within the correct ranges")
+    
         # off, 1.25, 2.5, 3.75, 5V for unregulated 
-        #elif AtrialAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
-        #    raise Exception ("Atrial amplitude is not an acceptable value")
+        elif AtrialAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+            raise Exception ("Atrial amplitude is not an acceptable value")
         self.AtrialAmplitude = AtrialAmplitude
 
     def getAtrialPulseWidth(self):
@@ -209,8 +212,9 @@ class user():
         except:
             raise TypeError("Atrial Pulse Width must be a float")
         
-        if AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
-            raise ValueError("Atrial pulse width is not within the correct range")
+        if AtrialPulseWidth not in range(0.1,2.0,0.1):
+            if AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
+                raise ValueError("Atrial pulse width is not within the correct range")
         self.AtrialPulseWidth = AtrialPulseWidth
 
     def getAtrialSensitivity(self):
@@ -224,7 +228,7 @@ class user():
             raise TypeError("Atrial sensitivity must be a float")
      
         if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
-            if(AtrialSensitivity < 1 or AtrialSensitivity > 10):
+            if (AtrialSensitivity < 1 or AtrialSensitivity > 10) or AtrialSensitivity not in range(1.0,10.5,0.5):
                 raise ValueError("Atrial sensitivity is not within the correct range")
         self.AtrialSensitivity = AtrialSensitivity
 
@@ -239,12 +243,13 @@ class user():
             raise TypeError("Ventricular Amplitude must be a float")
 
         if VentricularAmplitude < 0.5 or VentricularAmplitude > 3.2:
-            if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
-                raise ValueError("Ventricular amplitude is not within the correct ranges")
+            if VentricularAmplitude not in range(3.5,7,0.5):
+                if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
+                    raise ValueError("Ventricular amplitude is not within the correct ranges")
         
         # off, 1.25, 2.5, 3.75, 5V for unregulated
-        #elif VentricularAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
-        #    raise Exception ("Ventricular amplitude is not an acceptable value")
+        elif VentricularAmplitude not in [0, 1.25, 2.5, 3.75, 5]:
+            raise Exception ("Ventricular amplitude is not an acceptable value")
         self.VentricularAmplitude = VentricularAmplitude
 
     def getVentricularPulseWidth(self):
@@ -257,8 +262,9 @@ class user():
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
 
-        if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
-            raise ValueError("Ventricular pulse width is not within the correct range")
+        if VentricularPulseWidth not in range(0.1,2.0,0.1):
+            if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
+                raise ValueError("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVentricularSensitivity(self):
@@ -272,7 +278,7 @@ class user():
             raise TypeError("Ventricular sensitivity must be a float")
      
         if VentricularSensitivity!= 0.25 and VentricularSensitivity!= 0.5 and VentricularSensitivity!= 0.75:
-            if(VentricularSensitivity < 1 or VentricularSensitivity > 10):
+            if(VentricularSensitivity < 1 or VentricularSensitivity > 10) or VentricularSensitivity not in range(1.0,10.5,0.5):
                 raise ValueError("Ventricular sensitivity is not within the correct range")
         self.VentricularSensitivity = VentricularSensitivity
 
@@ -286,7 +292,7 @@ class user():
         except:
             raise TypeError("VRP must be a integer")
         
-        if VRP < 150 or VRP > 500:
+        if(VRP < 150 or VRP > 500) or VRP not in range(150,501,10):
             raise ValueError("Ventricular refractory period is not within the correct range")
         self.VRP = VRP
 
@@ -300,7 +306,7 @@ class user():
         except:
             raise TypeError("ARP must be a integer")
         
-        if ARP < 150 or ARP > 500:
+        if ARP < 150 or ARP > 500 or ARP not in range(150,501,10):
             raise ValueError("Atrial refractory period is not within the correct range")
         self.ARP = ARP
 
@@ -314,7 +320,7 @@ class user():
         except:
             raise TypeError("Max sensor rate must be a integer")
 
-        if MaxSensorRate < 50 or MaxSensorRate > 175:
+        if (MaxSensorRate < 50 or MaxSensorRate > 175) or MaxSensorRate not in range(50,176,5):
             raise ValueError("Max sensor rate is not within the correct range")
         self.MaxSensorRate = MaxSensorRate
 
@@ -328,7 +334,7 @@ class user():
         except:
             raise TypeError("Fixed AV delay must be a integer")
 
-        if FixedAVdelay < 70 or FixedAVdelay > 300:
+        if (FixedAVdelay < 70 or FixedAVdelay > 300) or FixedAVdelay not in range(70,301,10):
             raise ValueError("Fixed AV delay is not within the correct range")
         self.FixedAVdelay = FixedAVdelay
 
@@ -342,7 +348,7 @@ class user():
         except:
             raise TypeError("Dynamic AV delay must be a integer")
         
-        if DynamicAVdelay < 30 or DynamicAVdelay > 100:
+        if (DynamicAVdelay < 30 or DynamicAVdelay > 100) or DynamicAVdelay not in range(30,101,10):
             raise ValueError("Dynamic AV delay is not within the correct range")
         self.DynamicAVdelay = DynamicAVdelay
 
@@ -357,7 +363,7 @@ class user():
             raise TypeError("AV delay offset must be a integer")
         
         if AVdelayOffset != 0:
-            if AVdelayOffset < -100 or AVdelayOffset > -10:
+            if (AVdelayOffset < -100 or AVdelayOffset > -10) or AVdelayOffset not in range(-10,-101,-10):
                 raise ValueError("AV delay offset is not within the correct range")
         self.AVdelayOffset = AVdelayOffset
 
@@ -371,7 +377,7 @@ class user():
         except:
             raise TypeError("PVARP must be a integer")
         
-        if PVARP < 150 or PVARP > 500:
+        if (PVARP < 150 or PVARP > 500) or PVARP not in range(150,501,10):
             raise ValueError("PVARP is not within the correct range")
         self.PVARP = PVARP
 
@@ -386,7 +392,7 @@ class user():
             raise TypeError("PVARP extension must be a integer")
         
         if PVARPextension != 0:
-            if PVARPextension < 50 or PVARPextension > 400:
+            if (PVARPextension < 50 or PVARPextension > 400) or PVARPextension not in range(50,400,50):
                 raise ValueError("PVARPextension is not within the correct range")
         self.PVARPextension = PVARPextension
 
@@ -401,8 +407,10 @@ class user():
             raise TypeError("Hysteresis must be a integer")
         
         if Hysteresis != 0:
-            if Hysteresis < 30 or Hysteresis > 175:
-                raise ValueError("Hysteresis is not within the correct range")
+            if (Hysteresis < 30 or Hysteresis > 50) or Hysteresis not in range(30,51,5):
+                if Hysteresis < 50 or Hysteresis > 90:
+                    if (Hysteresis < 90 or Hysteresis > 175) or Hysteresis not in range(90,176,5):
+                        raise ValueError("Hysteresis is not within the correct range")
         self.Hysteresis = Hysteresis
 
     def getRateSmoothing(self):
@@ -429,7 +437,7 @@ class user():
         except:
             raise TypeError("Reaction time must be a integer")
         
-        if ReactionTime < 10 or ReactionTime > 50:
+        if (ReactionTime < 10 or ReactionTime > 50) or ReactionTime not in range(10,51,10):
             raise ValueError("Reaction time is not within the correct range")
         self.ReactionTime = ReactionTime
 
@@ -514,7 +522,7 @@ class user():
             raise TypeError("ATR duration must be a integer")
         
         if ATRduration != 10:
-            if ATRduration < 20 or ATRduration > 80:
-                if ATRduration < 100 or ATRduration > 2000:
+            if (ATRduration < 20 or ATRduration > 80) or ATRduration not in range(20,81,20):
+                if (ATRduration < 100 or ATRduration > 2000) or ATRduration not in range(100,2001,100):
                     raise ValueError("ATR duration is not within the correct range")
         self.ATRduration = ATRduration
