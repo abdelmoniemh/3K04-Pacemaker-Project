@@ -68,6 +68,8 @@ class user():
         self.ATRmode = 1
         self.ATRtime = 3 
         self.ATRduration = 70
+
+        self.outputLength = 0
         
     def serialize(self):
         # store user data in txt files in directory/db
@@ -103,21 +105,25 @@ class user():
             "VVI": 4,
 
         }
-        toWrite = b'x\16' + b'x\55' #  + b'x\22'
-        #toWrite = bytes()
-        if parameterName not in parameterDictionary.keys():
-            return False
+        Start = b'\x16'
+        SYNC = b'\x22'
+        Fn_set = b'\x55'
+        toWrite = Start + Fn_set
+
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
-            toWrite += parameterDictionary[parameterName[0:2]]
-            struct.pack("i", parameterDictionary[parameterName])
+            toWrite += struct.pack("i", parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
+            pacemaker = serial.Serial("COM3", 115200)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', parameterDictionary[parameter[0:3]]))}")
+            self.outputLength += len(struct.pack('i', parameterDictionary['VOO']))
+            pacemaker.write(toWrite)
+            pacemaker.close()
         else:
             toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
             print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
-        #with serial.Serial('COM3',
-        #             baudrate=115200,
-        #             bytesize=serial.EIGHTBITS,
-        #             parity=serial.PARITY_NONE) as pacemaker:
-        #   pacemaker.write(toWrite)
+            self.outputLength += len(struct.pack(typeDictionary[type(parameter)], parameter))
+            pacemaker = serial.Serial("COM3", 115200)
+            pacemaker.write(toWrite)
+            pacemaker.close()
         return True
 
 
@@ -150,10 +156,31 @@ class user():
             "ATRtime",
             "ATRduration"
         ]
+
+        #outputParameters = ["BradycardiaOperatingMode"]
         for name in outputParameters:
             written = self.setParameterOnBoard(name, self.__dict__[name])
             status.append((name, written))
-        return status
+        return status, self.outputLength
+
+    def echoParametersFromBoard(self):
+        status = []
+
+        Start = b'\x16'
+        SYNC = b'\x22'
+        Fn_set = b'\x55'
+
+        toWrite = Start + SYNC
+        with serial.Serial('COM3',
+                    baudrate=115200,
+                    bytesize=serial.EIGHTBITS,
+                    parity=serial.PARITY_NONE) as pacemaker:
+          pacemaker.write(toWrite)
+          for i in range(1):
+              status.append(pacemaker.read(1))
+
+        print(status)
+        return True
 
     def getAllAttributes(self):
         return self.__dict__.items()
