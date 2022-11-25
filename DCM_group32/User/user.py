@@ -18,13 +18,18 @@ class user():
     instanceCount = len([file for file in os.listdir(appUserDirectory) if file.endswith(".json")])
 
     def __init__(self, username, password, subDirectory=""):
+        if not username.isalnum():
+            raise ValueError("Username can only contain letters or numbers.")
+        if not password.isalnum():
+            raise ValueError("Password can only contain letters or numbers.")
         self.createAttributes(username, password)
         self.subDirectory = subDirectory
         self.appUserDirectory += self.subDirectory
         userPath = os.path.join(self.appUserDirectory, f"{username}.json")
         if (not os.path.exists(userPath)):       
             if (self.instanceCount + 1 > 10):
-                raise ValueError #too many users to create a new one, catch and handle in gui code
+                raise ValueError("Sign Up Failed: The max amount of users has been hit.\n \
+                                        Delete users before creating more.") #too many users to create a new one, catch and handle in gui code
             else:
                 self.instanceCount += 1
                 self.serialize()
@@ -56,10 +61,10 @@ class user():
         self.PVARPextension = 200
         self.Hysteresis = 60
         self.RateSmoothing = 12
-        self.ReationTime = 25
+        self.ReactionTime = 25
         self.ResponseFactor = 10
         self.RecoveryTime = 8
-        self.ActivityThreshold = "Med"
+        self.ActivityThreshold = "Med" # Need to be able to read at matlab uart if implements
         self.ATRmode = 1
         self.ATRtime = 3 
         self.ATRduration = 70
@@ -92,52 +97,61 @@ class user():
             int : "i"
         }
         parameterDictionary = {
-            "BradycardiaOperatingMode": b'x\00000',
-            "LowerRateLimit": b'x\00001',
-            "UpperRateLimit": b'x\00010',
-            "AtrialAmplitude": b'x\00011',
-            "AtrialPulseWidth":b'x\00100',
-            "AtrialSensitivity":b'x\00101',
-            "VentricularAmplitude":b'x\00110',
-            "VentricularPulseWidth":b'x\00111',
-            "VentricularSensitivity":b'x\01000',
-            "VRP":b'x\01001',
-            "ARP":b'x\01010',
-            "MaxSensorRate":b'x\01011',
-            "FixedAVdelay":b'x\01100',
-            "DynamicAVdelay":b'x\01101',
-            "AVdelayOffset":b'x\01110',
-            "PVARP":b'x\01111',
-            "PVARPextension":b'x\10000',
-            "Hysteresis":b'x\10001',
-            "RateSmoothing":b'x\10010',
-            "ReationTime":b'x\10011',
-            "ResponseFactor":b'x\10100',
+            "AOO": 1,
+            "VOO": 2,
+            "AAI": 3,
+            "VVI": 4,
+
         }
-        toWrite = b'x\16' + b'x\22' + b'x\55'
+        toWrite = b'x\16' + b'x\55' #  + b'x\22'
         #toWrite = bytes()
         if parameterName not in parameterDictionary.keys():
             return False
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
-            toWrite += parameterDictionary[parameterName]
-            for char in parameter:
-                toWrite += struct.pack("c", bytes(char.encode()))
-            print(f"parameterName = {parameterName}, {toWrite}")
+            toWrite += parameterDictionary[parameterName[0:2]]
+            struct.pack("i", parameterDictionary[parameterName])
         else:
-            toWrite += parameterDictionary[parameterName] + struct.pack(typeDictionary[type(parameter)], parameter)
-            print(f"parameterName = {parameterName}, {toWrite}")
-        with serial.Serial('COM3',
-                     baudrate=115200,
-                     bytesize=serial.EIGHTBITS,
-                     parity=serial.PARITY_NONE) as pacemaker:
-           pacemaker.write(toWrite)
+            toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
+        #with serial.Serial('COM3',
+        #             baudrate=115200,
+        #             bytesize=serial.EIGHTBITS,
+        #             parity=serial.PARITY_NONE) as pacemaker:
+        #   pacemaker.write(toWrite)
         return True
 
 
     def writeParamtersToBoard(self):
         status = []
-        for name, value in self.__dict__.items():
-            written = self.setParameterOnBoard(name, value)
+        outputParameters = [
+            "BradycardiaOperatingMode",
+            "LowerRateLimit",
+            "UpperRateLimit",
+            "AtrialAmplitude",
+            "AtrialPulseWidth",
+            "AtrialSensitivity",
+            "VentricularAmplitude",
+            "VentricularPulseWidth",
+            "VentricularSensitivity",
+            "VRP",
+            "ARP",
+            "MaxSensorRate",
+            "FixedAVdelay",
+            "DynamicAVdelay",
+            "AVdelayOffset",
+            "PVARP",
+            "PVARPextension",
+            "Hysteresis",
+            "RateSmoothing",
+            "ReactionTime",
+            "ResponseFactor",
+            "RecoveryTime",
+            "ATRmode",
+            "ATRtime",
+            "ATRduration"
+        ]
+        for name in outputParameters:
+            written = self.setParameterOnBoard(name, self.__dict__[name])
             status.append((name, written))
         return status
 
@@ -428,7 +442,7 @@ class user():
         self.RateSmoothing = RateSmoothing
 
     def getReactionTime(self):
-        return self.ReationTime
+        return self.ReactionTime
 
     def setReactionTime(self, ReactionTime):
         # 10-50s                                   
