@@ -155,26 +155,70 @@ class user():
         toWrite = Start + Fn_set
         for name in outputParameters:
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
-        pacemaker = serial.Serial("COM4", 115200)
+        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
         pacemaker.write(toWrite)
         pacemaker.close()
         return status, len(toWrite)
 
     def echoParametersFromBoard(self):
         status = []
-
+        outputParameters = [
+            "BradycardiaOperatingMode",
+            "LowerRateLimit",
+            "UpperRateLimit",
+            "AtrialAmplitude",
+            "AtrialPulseWidth",
+            "AtrialSensitivity",
+            "VentricularAmplitude",
+            "VentricularPulseWidth",
+            "VentricularSensitivity",
+            "VRP",
+            "ARP",
+            "MaxSensorRate",
+            "FixedAVdelay",
+            "DynamicAVdelay",
+            "AVdelayOffset",
+            "PVARP",
+            "PVARPextension",
+            "Hysteresis",
+            "RateSmoothing",
+            "ReactionTime",
+            "ResponseFactor",
+            "RecoveryTime",
+            "ATRmode",
+            "ATRtime",
+            "ATRduration"
+        ]
         Start = b'\x16'
         SYNC = b'\x22'
         Fn_set = b'\x55'
 
-        toWrite = Start + SYNC
-        pacemaker = serial.Serial("COM4", 115200)
-        pacemaker.write(toWrite)
-        status.append(pacemaker.read())
-        pacemaker.close()
+        #outputParameters = ["BradycardiaOperatingMode"]
 
-        print(status)
-        return True
+        toWrite = Start + SYNC
+        for name in outputParameters:
+            toWrite += self.setParameterOnBoard(name, self.__dict__[name])
+        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
+        pacemaker.write(toWrite)
+        status = pacemaker.read(100)
+        pacemaker.close()
+        values = []
+        index = 0
+        typeDictionary = {
+            float : "f",
+            int : "i"
+        }
+        for attr in outputParameters:
+            if attr == "BradycardiaOperatingMode":
+                value = struct.unpack("i", status[index:index+4])[0]
+                index +=4
+            else:
+                print(index, index+4)
+                value = struct.unpack(typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
+                index +=4
+            values.append((attr, value))
+        print(values)
+        return status, len(toWrite)
 
     def getAllAttributes(self):
         return self.__dict__.items()
