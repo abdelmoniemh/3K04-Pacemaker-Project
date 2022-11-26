@@ -9,14 +9,13 @@ class testUserClass(unittest.TestCase):
         testCreateNewUser.setVentricularPulseWidth(123)
         testCreateNewUser.serialize()
         testCreateNewUserDeserialized = user("username", "password", "/test")
-        testCreateDifferentUser = user("username-2", "pAsSwOrD")
+        testCreateDifferentUser = user("username2", "pAsSwOrD")
         assert(testCreateNewUser.getVentricularPulseWidth() == testCreateNewUserDeserialized.getVentricularPulseWidth())
         assert(not (testCreateNewUser.getVentricularPulseWidth() == testCreateDifferentUser.getVentricularPulseWidth()))
 
     def testWriteParameters(self):
         User = user("username3", "password", "/serialtest")
         User.setBradycardiaOperatingMode("AOOO")
-
         User.serialize()
         status, length = User.writeParamtersToBoard()
         print(length)
