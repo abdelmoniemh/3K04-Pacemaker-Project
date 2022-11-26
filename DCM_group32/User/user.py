@@ -103,28 +103,18 @@ class user():
             "VOO": 2,
             "AAI": 3,
             "VVI": 4,
-
         }
-        Start = b'\x16'
-        SYNC = b'\x22'
-        Fn_set = b'\x55'
-        toWrite = Start + Fn_set
-
+        toWrite = bytes()
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
             toWrite += struct.pack("i", parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
-            pacemaker = serial.Serial("COM3", 115200)
             print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', parameterDictionary[parameter[0:3]]))}")
             self.outputLength += len(struct.pack('i', parameterDictionary['VOO']))
-            pacemaker.write(toWrite)
-            pacemaker.close()
         else:
             toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
             print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
             self.outputLength += len(struct.pack(typeDictionary[type(parameter)], parameter))
-            pacemaker = serial.Serial("COM3", 115200)
-            pacemaker.write(toWrite)
-            pacemaker.close()
-        return True
+
+        return toWrite
 
 
     def writeParamtersToBoard(self):
@@ -156,12 +146,19 @@ class user():
             "ATRtime",
             "ATRduration"
         ]
+        Start = b'\x16'
+        SYNC = b'\x22'
+        Fn_set = b'\x55'
 
         #outputParameters = ["BradycardiaOperatingMode"]
+
+        toWrite = Start + Fn_set
         for name in outputParameters:
-            written = self.setParameterOnBoard(name, self.__dict__[name])
-            status.append((name, written))
-        return status, self.outputLength
+            toWrite += self.setParameterOnBoard(name, self.__dict__[name])
+        pacemaker = serial.Serial("COM3", 115200)
+        pacemaker.write(toWrite)
+        pacemaker.close()
+        return status, len(toWrite)
 
     def echoParametersFromBoard(self):
         status = []
