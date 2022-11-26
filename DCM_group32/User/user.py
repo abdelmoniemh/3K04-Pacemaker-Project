@@ -155,7 +155,7 @@ class user():
         toWrite = Start + Fn_set
         for name in outputParameters:
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
-        pacemaker = serial.Serial("COM3", 115200)
+        pacemaker = serial.Serial("COM4", 115200)
         pacemaker.write(toWrite)
         pacemaker.close()
         return status, len(toWrite)
@@ -168,13 +168,10 @@ class user():
         Fn_set = b'\x55'
 
         toWrite = Start + SYNC
-        with serial.Serial('COM3',
-                    baudrate=115200,
-                    bytesize=serial.EIGHTBITS,
-                    parity=serial.PARITY_NONE) as pacemaker:
-          pacemaker.write(toWrite)
-          for i in range(1):
-              status.append(pacemaker.read(1))
+        pacemaker = serial.Serial("COM4", 115200)
+        pacemaker.write(toWrite)
+        status.append(pacemaker.read())
+        pacemaker.close()
 
         print(status)
         return True
@@ -300,9 +297,9 @@ class user():
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
 
-        if VentricularPulseWidth not in range(0.1,2.0,0.1):
-            if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
-                raise ValueError("Ventricular pulse width is not within the correct range")
+        # if VentricularPulseWidth not in range(0.1,2.0,0.1):
+        #     if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
+        #         raise ValueError("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVentricularSensitivity(self):

@@ -15,12 +15,12 @@ class testUserClass(unittest.TestCase):
 
     def testWriteParameters(self):
         User = user("username3", "password", "/serialtest")
-        User.setBradycardiaOperatingMode("AOOO")
+        User.setBradycardiaOperatingMode("VOOO")
         User.serialize()
         status, length = User.writeParamtersToBoard()
         print(length)
 
-        #User.echoParametersFromBoard()
+        User.echoParametersFromBoard()
 
 if __name__ == '__main__':
     unittest.main()
