@@ -18,7 +18,8 @@ class testUserClass(unittest.TestCase):
         User.setBradycardiaOperatingMode("VOOO")
         User.serialize()
         status, length = User.writeParamtersToBoard()
-        print(length)
+        #print(status)
+        #print(length)
 
         User.echoParametersFromBoard()
 
