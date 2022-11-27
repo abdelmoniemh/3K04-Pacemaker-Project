@@ -4,6 +4,7 @@ import json
 import os
 import serial
 import struct
+import numpy as np
 
 #if on linux or macos make sure "TMPDIR" env variable is set
 #os.environ["TMPDIR"] = "/home/tempdir" #for linux
@@ -299,7 +300,7 @@ class user():
             raise TypeError("Atrial Amplitude must be a float")
         
         if (AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2) or AtrialAmplitude not in range(0.5,3.3,0.1):
-            if AtrialAmplitude not in range(3.5,7,0.5):
+            if AtrialAmplitude not in np.arange(3.5,7,0.5):
                 if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
                     raise ValueError("Atrial amplitude is not within the correct ranges")
     
@@ -318,7 +319,7 @@ class user():
         except:
             raise TypeError("Atrial Pulse Width must be a float")
         
-        if AtrialPulseWidth not in range(0.1,2.0,0.1):
+        if AtrialPulseWidth not in np.arange(0.1,2.0,0.1):
             if AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
                 raise ValueError("Atrial pulse width is not within the correct range")
         self.AtrialPulseWidth = AtrialPulseWidth
@@ -334,7 +335,7 @@ class user():
             raise TypeError("Atrial sensitivity must be a float")
      
         if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
-            if (AtrialSensitivity < 1 or AtrialSensitivity > 10) or AtrialSensitivity not in range(1.0,10.5,0.5):
+            if (AtrialSensitivity < 1 or AtrialSensitivity > 10) or AtrialSensitivity not in np.arange(1.0,10.5,0.5):
                 raise ValueError("Atrial sensitivity is not within the correct range")
         self.AtrialSensitivity = AtrialSensitivity
 
@@ -349,7 +350,7 @@ class user():
             raise TypeError("Ventricular Amplitude must be a float")
 
         if VentricularAmplitude < 0.5 or VentricularAmplitude > 3.2:
-            if VentricularAmplitude not in range(3.5,7,0.5):
+            if VentricularAmplitude not in np.arange(3.5,7,0.5):
                 if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
                     raise ValueError("Ventricular amplitude is not within the correct ranges")
         
@@ -368,9 +369,9 @@ class user():
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
 
-        # if VentricularPulseWidth not in range(0.1,2.0,0.1):
-        #     if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
-        #         raise ValueError("Ventricular pulse width is not within the correct range")
+        if VentricularPulseWidth not in np.arange(0.1,2.0,0.1):
+            if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
+                raise ValueError("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
 
     def getVentricularSensitivity(self):
@@ -384,7 +385,7 @@ class user():
             raise TypeError("Ventricular sensitivity must be a float")
      
         if VentricularSensitivity!= 0.25 and VentricularSensitivity!= 0.5 and VentricularSensitivity!= 0.75:
-            if(VentricularSensitivity < 1 or VentricularSensitivity > 10) or VentricularSensitivity not in range(1.0,10.5,0.5):
+            if(VentricularSensitivity < 1 or VentricularSensitivity > 10) or VentricularSensitivity not in np.arange(1.0,10.5,0.5):
                 raise ValueError("Ventricular sensitivity is not within the correct range")
         self.VentricularSensitivity = VentricularSensitivity
 
