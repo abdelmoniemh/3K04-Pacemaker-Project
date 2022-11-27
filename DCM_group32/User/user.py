@@ -4,6 +4,7 @@ import json
 import os
 import serial
 import struct
+import numpy as np
 
 #if on linux or macos make sure "TMPDIR" env variable is set
 #os.environ["TMPDIR"] = "/home/tempdir" #for linux
@@ -56,18 +57,18 @@ class user():
         self.MaxSensorRate = 100
         self.FixedAVdelay = 150
         self.DynamicAVdelay = 60
-        self.AVdelayOffset = -55
+        self.AVdelayOffset = -50
         self.PVARP = 300
         self.PVARPextension = 200
         self.Hysteresis = 60
         self.RateSmoothing = 12
-        self.ReactionTime = 25
+        self.ReactionTime = 20
         self.ResponseFactor = 10
         self.RecoveryTime = 8
         self.ActivityThreshold = "Med" # Need to be able to read at matlab uart if implements
         self.ATRmode = 1
         self.ATRtime = 3 
-        self.ATRduration = 70
+        self.ATRduration = 60
 
         self.outputLength = 0
         
@@ -155,29 +156,97 @@ class user():
         toWrite = Start + Fn_set
         for name in outputParameters:
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
-        pacemaker = serial.Serial("COM3", 115200)
+        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
         pacemaker.write(toWrite)
         pacemaker.close()
         return status, len(toWrite)
 
     def echoParametersFromBoard(self):
         status = []
-
+        outputParameters = [
+            "BradycardiaOperatingMode",
+            "LowerRateLimit",
+            "UpperRateLimit",
+            "AtrialAmplitude",
+            "AtrialPulseWidth",
+            "AtrialSensitivity",
+            "VentricularAmplitude",
+            "VentricularPulseWidth",
+            "VentricularSensitivity",
+            "VRP",
+            "ARP",
+            "MaxSensorRate",
+            "FixedAVdelay",
+            "DynamicAVdelay",
+            "AVdelayOffset",
+            "PVARP",
+            "PVARPextension",
+            "Hysteresis",
+            "RateSmoothing",
+            "ReactionTime",
+            "ResponseFactor",
+            "RecoveryTime",
+            "ATRmode",
+            "ATRtime",
+            "ATRduration"
+        ]
         Start = b'\x16'
         SYNC = b'\x22'
         Fn_set = b'\x55'
 
-        toWrite = Start + SYNC
-        with serial.Serial('COM3',
-                    baudrate=115200,
-                    bytesize=serial.EIGHTBITS,
-                    parity=serial.PARITY_NONE) as pacemaker:
-          pacemaker.write(toWrite)
-          for i in range(1):
-              status.append(pacemaker.read(1))
+        #outputParameters = ["BradycardiaOperatingMode"]
 
-        print(status)
-        return True
+        toWrite = Start + SYNC
+        for name in outputParameters:
+            toWrite += self.setParameterOnBoard(name, self.__dict__[name])
+        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
+        pacemaker.write(toWrite)
+        status = pacemaker.read(100)
+        pacemaker.close()
+        values = []
+        index = 0
+        typeDictionary = {
+            float : "f",
+            int : "i"
+        }
+        for attr in outputParameters:
+            if attr == "BradycardiaOperatingMode":
+                value = struct.unpack("i", status[index:index+4])[0]
+                index +=4
+            else:
+                print(index, index+4)
+                value = struct.unpack(typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
+                index +=4
+            values.append((attr, value))
+        print(values)
+
+        self.setBradycardiaOperatingMode(values[0][1])
+        self.setLowerRateLimit(values[1][1])
+        self.setUpperRateLimit(values[2][1])
+        self.setAtrialAmplitude(values[3][1])
+        self.setAtrialPulseWidth(round(values[4][1],2))
+        self.setAtrialSensitivity(values[5][1])
+        self.setVentricularAmplitude(values[6][1])
+        self.setVentricularPulseWidth(round(values[7][1],2))
+        self.setVentricularSensitivity(values[8][1])
+        self.setVRP(values[9][1])
+        self.setARP(values[10][1])
+        self.setMaxSensorRate(values[11][1])
+        self.setFixedAVdelay(values[12][1])
+        self.setDynamicAVdelay(values[13][1])
+        self.setAVdelayOffset(values[14][1])
+        self.setPVARP(values[15][1])
+        self.setPVARPextension(values[16][1])
+        self.setHysteresis(values[17][1])
+        self.setRateSmoothing(values[18][1])
+        self.setReactionTime(values[19][1])
+        self.setResponseFactor(values[20][1])
+        self.setRecoveryTime(values[21][1])
+        self.setATRmode(values[22][1])
+        self.setATRtime(values[23][1])
+        self.setATRduration(values[24][1])
+
+        return status, len(toWrite)
 
     def getAllAttributes(self):
         return self.__dict__.items()
@@ -231,7 +300,7 @@ class user():
             raise TypeError("Atrial Amplitude must be a float")
         
         if (AtrialAmplitude < 0.5 or AtrialAmplitude > 3.2) or AtrialAmplitude not in range(0.5,3.3,0.1):
-            if AtrialAmplitude not in range(3.5,7,0.5):
+            if AtrialAmplitude not in np.arange(3.5,7,0.5):
                 if AtrialAmplitude != 0 and (AtrialAmplitude < 3.5 or AtrialAmplitude > 7):
                     raise ValueError("Atrial amplitude is not within the correct ranges")
     
@@ -250,7 +319,7 @@ class user():
         except:
             raise TypeError("Atrial Pulse Width must be a float")
         
-        if AtrialPulseWidth not in range(0.1,2.0,0.1):
+        if AtrialPulseWidth not in np.arange(0.1,2.0,0.1):
             if AtrialPulseWidth != 0.05 and (AtrialPulseWidth < 0.1 or AtrialPulseWidth > 1.9):
                 raise ValueError("Atrial pulse width is not within the correct range")
         self.AtrialPulseWidth = AtrialPulseWidth
@@ -266,7 +335,7 @@ class user():
             raise TypeError("Atrial sensitivity must be a float")
      
         if AtrialSensitivity!= 0.25 and AtrialSensitivity!= 0.5 and AtrialSensitivity!= 0.75:
-            if (AtrialSensitivity < 1 or AtrialSensitivity > 10) or AtrialSensitivity not in range(1.0,10.5,0.5):
+            if (AtrialSensitivity < 1 or AtrialSensitivity > 10) or AtrialSensitivity not in np.arange(1.0,10.5,0.5):
                 raise ValueError("Atrial sensitivity is not within the correct range")
         self.AtrialSensitivity = AtrialSensitivity
 
@@ -281,7 +350,7 @@ class user():
             raise TypeError("Ventricular Amplitude must be a float")
 
         if VentricularAmplitude < 0.5 or VentricularAmplitude > 3.2:
-            if VentricularAmplitude not in range(3.5,7,0.5):
+            if VentricularAmplitude not in np.arange(3.5,7,0.5):
                 if VentricularAmplitude != 0 and (VentricularAmplitude < 3.5 or VentricularAmplitude > 7):
                     raise ValueError("Ventricular amplitude is not within the correct ranges")
         
@@ -300,7 +369,7 @@ class user():
         except:
             raise TypeError("Ventricular Pulse Width must be a float")
 
-        if VentricularPulseWidth not in range(0.1,2.0,0.1):
+        if VentricularPulseWidth not in np.arange(0.1,2.0,0.1):
             if VentricularPulseWidth != 0.05 and (VentricularPulseWidth < 0.1 or VentricularPulseWidth > 1.9):
                 raise ValueError("Ventricular pulse width is not within the correct range")
         self.VentricularPulseWidth = VentricularPulseWidth
@@ -316,7 +385,7 @@ class user():
             raise TypeError("Ventricular sensitivity must be a float")
      
         if VentricularSensitivity!= 0.25 and VentricularSensitivity!= 0.5 and VentricularSensitivity!= 0.75:
-            if(VentricularSensitivity < 1 or VentricularSensitivity > 10) or VentricularSensitivity not in range(1.0,10.5,0.5):
+            if(VentricularSensitivity < 1 or VentricularSensitivity > 10) or VentricularSensitivity not in np.arange(1.0,10.5,0.5):
                 raise ValueError("Ventricular sensitivity is not within the correct range")
         self.VentricularSensitivity = VentricularSensitivity
 
@@ -401,7 +470,7 @@ class user():
             raise TypeError("AV delay offset must be a integer")
         
         if AVdelayOffset != 0:
-            if (AVdelayOffset < -100 or AVdelayOffset > -10) or AVdelayOffset not in range(-10,-101,-10):
+            if (AVdelayOffset < -100 or AVdelayOffset > -10) or AVdelayOffset not in range(-100,-9,10):
                 raise ValueError("AV delay offset is not within the correct range")
         self.AVdelayOffset = AVdelayOffset
 
