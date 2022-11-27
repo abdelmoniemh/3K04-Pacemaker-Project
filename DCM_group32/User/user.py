@@ -57,18 +57,18 @@ class user():
         self.MaxSensorRate = 100
         self.FixedAVdelay = 150
         self.DynamicAVdelay = 60
-        self.AVdelayOffset = -55
+        self.AVdelayOffset = -50
         self.PVARP = 300
         self.PVARPextension = 200
         self.Hysteresis = 60
         self.RateSmoothing = 12
-        self.ReactionTime = 25
+        self.ReactionTime = 20
         self.ResponseFactor = 10
         self.RecoveryTime = 8
         self.ActivityThreshold = "Med" # Need to be able to read at matlab uart if implements
         self.ATRmode = 1
         self.ATRtime = 3 
-        self.ATRduration = 70
+        self.ATRduration = 60
 
         self.outputLength = 0
         
@@ -470,7 +470,7 @@ class user():
             raise TypeError("AV delay offset must be a integer")
         
         if AVdelayOffset != 0:
-            if (AVdelayOffset < -100 or AVdelayOffset > -10) or AVdelayOffset not in range(-10,-101,-10):
+            if (AVdelayOffset < -100 or AVdelayOffset > -10) or AVdelayOffset not in range(-100,-9,10):
                 raise ValueError("AV delay offset is not within the correct range")
         self.AVdelayOffset = AVdelayOffset
 
