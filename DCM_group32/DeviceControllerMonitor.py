@@ -63,6 +63,8 @@ class DeviceControllerMonitor(QDialog):
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
         self.resetButton.clicked.connect(self.resetFields)
+        self.writeParametersButton.clicked.connect(self.writeParametersToBoard)
+        self.echoParametersButton.clicked.connect(self.echoParametersFromBoard)
         self.pacedComboBox.activated.connect(self.handleModeChange)
         self.sensedComboBox.activated.connect(self.handleModeChange)
         self.responseComboBox.activated.connect(self.handleModeChange)
@@ -206,6 +208,18 @@ class DeviceControllerMonitor(QDialog):
         except Exception as e:
             print(f"Error Saving: {e}")
             self.errorLabel.setText(f"Error Saving: {e}")
+
+    def writeParametersToBoard(self):
+        try:
+            self.user.writeParametersToBoard()
+        except Exception as e:
+            self.errorLabel.setText(str(e))
+        
+    def echoParametersFromBoard(self):
+        try:
+            self.user.echoParametersFromBoard()
+        except Exception as e:
+            self.errorLabel.setText(str(e))
 
     def logOut(self):
         self.user = None
