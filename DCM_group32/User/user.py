@@ -218,6 +218,33 @@ class user():
                 index +=4
             values.append((attr, value))
         print(values)
+
+        self.setBradycardiaOperatingMode(values[0][1])
+        self.setLowerRateLimit(values[1][1])
+        self.setUpperRateLimit(values[2][1])
+        self.setAtrialAmplitude(values[3][1])
+        self.setAtrialPulseWidth(round(values[4][1],2))
+        self.setAtrialSensitivity(values[5][1])
+        self.setVentricularAmplitude(values[6][1])
+        self.setVentricularPulseWidth(round(values[7][1],2))
+        self.setVentricularSensitivity(values[8][1])
+        self.setVRP(values[9][1])
+        self.setARP(values[10][1])
+        self.setMaxSensorRate(values[11][1])
+        self.setFixedAVdelay(values[12][1])
+        self.setDynamicAVdelay(values[13][1])
+        self.setAVdelayOffset(values[14][1])
+        self.setPVARP(values[15][1])
+        self.setPVARPextension(values[16][1])
+        self.setHysteresis(values[17][1])
+        self.setRateSmoothing(values[18][1])
+        self.setReactionTime(values[19][1])
+        self.setResponseFactor(values[20][1])
+        self.setRecoveryTime(values[21][1])
+        self.setATRmode(values[22][1])
+        self.setATRtime(values[23][1])
+        self.setATRduration(values[24][1])
+
         return status, len(toWrite)
 
     def getAllAttributes(self):
