@@ -77,8 +77,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>1600</width>
-       <height>1000</height>
+       <width>800</width>
+       <height>500</height>
       </size>
      </property>
      <property name="maximumSize">
@@ -515,6 +515,13 @@
         <widget class="QPushButton" name="writeParametersButton">
          <property name="text">
           <string>Write</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="4">
+        <widget class="QPushButton" name="egramButton">
+         <property name="text">
+          <string>EGRAM</string>
          </property>
         </widget>
        </item>

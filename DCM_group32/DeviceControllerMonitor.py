@@ -1,13 +1,16 @@
 import sys
 import os
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QLineEdit, QPushButton, QStackedWidget, \
-    QMainWindow, QDialog
+    QMainWindow, QDialog, QGridLayout
 from PyQt5.uic import loadUi
 import PyQt5.QtCore as Qt
 import User.user as User
+import serial
+import struct
+import pyqtgraph as pg
 
-WIDTH = 1600
-HEIGHT = 800
+WIDTH = 800
+HEIGHT = 500
 class loginScreen(QMainWindow):
 
     def __init__(self):
@@ -43,7 +46,7 @@ class loginScreen(QMainWindow):
                 # switch to logged in screen
                 print(f"Logged in to {self.user.username}")
                 DeviceControllerMonitor.setUser(self.user)
-                SceneManager.setCurrentIndex(SceneManager.currentIndex() + 1)
+                SceneManager.setCurrentIndex(1)
 
         self.loginButton.clicked.connect(createUser)
 
@@ -63,6 +66,9 @@ class DeviceControllerMonitor(QDialog):
         self.saveAllButton.clicked.connect(self.saveToUser)
         self.logoutButton.clicked.connect(self.logOut)
         self.resetButton.clicked.connect(self.resetFields)
+        def moveToEgram():
+            SceneManager.setCurrentIndex(2)
+        self.egramButton.clicked.connect(moveToEgram)
         self.writeParametersButton.clicked.connect(self.writeParametersToBoard)
         self.echoParametersButton.clicked.connect(self.echoParametersFromBoard)
         self.pacedComboBox.activated.connect(self.handleModeChange)
@@ -218,6 +224,7 @@ class DeviceControllerMonitor(QDialog):
     def echoParametersFromBoard(self):
         try:
             self.user.echoParametersFromBoard()
+            self.resetFields()
         except Exception as e:
             self.errorLabel.setText(str(e))
 
@@ -490,14 +497,95 @@ class DeviceControllerMonitor(QDialog):
             self.errorLabel.setText(f"{self.tempBradycardiaMode} is an invalid Bradycardia Operating Mode")
 
 
+class DisplayEgram(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.path.join("UI", "egramScreen.ui"), self)
+
+        #Configure Timer to update graph
+        self.timer = Qt.QTimer()
+        self.timer.setInterval(50)
+        self.timer.timeout.connect(self.getEgramData)
+        self.count = 0
+
+        #Configure Buttons
+        self.startButton.clicked.connect(self.getOrStopData)
+        self.backButton.clicked.connect(self.moveToDCM)
+        self.clearButton.clicked.connect(self.clearData)
+
+        self.start = False
+        self.layout = QGridLayout()
+        self.setFixedSize(WIDTH, HEIGHT)
+
+        self.atriumX = []
+        self.atriumY = []
+        self.dataLineA = self.atriumView.plot(self.atriumX, self.atriumY)
+        self.atriumView.setLabel("top", "Atrium Plot")
+
+        self.ventricleX = []
+        self.ventricleY = []
+        self.dataLineV = self.ventricleView.plot(self.ventricleX, self.ventricleY)
+        self.ventricleView.setLabel("top", "Ventricle Plot")
+
+
+
+    def getOrStopData(self):
+        if self.start:
+            self.start = False
+            self.timer.stop()
+        else:
+            self.start = True
+            self.timer.start()
+
+    def moveToDCM(self):
+        self.start = False
+        SceneManager.setCurrentIndex(1)
+
+    def clearData(self):
+        self.atriumX = []
+        self.atriumY = []
+        self.dataLineA = self.atriumView.clear()
+        self.ventricleX = []
+        self.ventricleY = []
+        self.dataLineV = self.ventricleView.clear()
+        self.count = 0
+
+    def getEgramData(self):
+        #print("here")
+
+        Start = b'\x16'
+        getData = b'\x77'
+        toWrite = Start + getData
+        for i in range(25):
+            toWrite += struct.pack("i", 0)
+
+        pacemaker = serial.Serial("COM4", 115200, timeout=2)
+        pacemaker.write(toWrite)
+        status = pacemaker.read(100)
+        pacemaker.close()
+
+        atrValue = struct.unpack("f", status[0:8])[0]
+        venValue = struct.unpack("f", status[8:16])[0]
+
+        self.atriumX.append(self.count)
+        self.atriumY.append(atrValue)
+        self.dataLineA = self.atriumView.plot(self.atriumX, self.atriumY)
+
+        self.ventricleX.append(self.count)
+        self.ventricleY.append(venValue)
+        self.dataLineA = self.ventricleView.plot(self.ventricleX, self.ventricleY)
+
+        self.count += 1
 
 app = QApplication([])
 SceneManager = QStackedWidget()
 SceneManager.setFixedSize(WIDTH, HEIGHT)
 DeviceControllerMonitor = DeviceControllerMonitor()
 loginScreen = loginScreen()
+graphEgram = DisplayEgram()
 
 SceneManager.addWidget(loginScreen)
 SceneManager.addWidget(DeviceControllerMonitor)
+SceneManager.addWidget(graphEgram)
 SceneManager.show()
 sys.exit(app.exec())
