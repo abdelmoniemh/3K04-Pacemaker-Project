@@ -599,12 +599,12 @@ class DisplayEgram(QDialog):
         Start = b'\x16'
         getData = b'\x77'
         toWrite = Start + getData
-        for i in range(26):
+        for i in range(25):
             toWrite += struct.pack("i", 0)
         tmsec = datetime.datetime.now()
         pacemaker = serial.Serial(self.comport, 115200, timeout=2)
         pacemaker.write(toWrite)
-        status = pacemaker.read(104)
+        status = pacemaker.read(100)
         pacemaker.close()
 
         atrValue = struct.unpack("d", status[0:8])[0]

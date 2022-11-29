@@ -99,8 +99,7 @@ class user():
             "RecoveryTime",
             "ATRmode",
             "ATRtime",
-            "ATRduration",
-            "ActivityThreshold"
+            "ATRduration"
         ]
 
         self.parameterDictionary = {
