@@ -67,12 +67,52 @@ class user():
         self.ReactionTime = 20
         self.ResponseFactor = 10
         self.RecoveryTime = 8
-        self.ActivityThreshold = "Med" # Need to be able to read at matlab uart if implements
+        self.ActivityThreshold = 1 # Need to be able to read at matlab uart if implements
         self.ATRmode = 1
         self.ATRtime = 3 
         self.ATRduration = 60
         self.previousVerisons = []
         self.outputLength = 0
+
+        self.outputParameters = [
+            "BradycardiaOperatingMode",
+            "LowerRateLimit",
+            "UpperRateLimit",
+            "AtrialAmplitude",
+            "AtrialPulseWidth",
+            "AtrialSensitivity",
+            "VentricularAmplitude",
+            "VentricularPulseWidth",
+            "VentricularSensitivity",
+            "VRP",
+            "ARP",
+            "MaxSensorRate",
+            "FixedAVdelay",
+            "DynamicAVdelay",
+            "AVdelayOffset",
+            "PVARP",
+            "PVARPextension",
+            "Hysteresis",
+            "RateSmoothing",
+            "ReactionTime",
+            "ResponseFactor",
+            "RecoveryTime",
+            "ATRmode",
+            "ATRtime",
+            "ATRduration",
+            "ActivityThreshold"
+        ]
+
+        self.typeDictionary = {
+            float : "f",
+            int : "i"
+        }
+        self.parameterDictionary = {
+            "AOO": 1,
+            "VOO": 2,
+            "AAI": 3,
+            "VVI": 4,
+        }
         
     def serialize(self):
         # store user data in txt files in directory/db
@@ -99,137 +139,68 @@ class user():
         self.instanceCount = len([file for file in os.listdir(self.appUserDirectory) if file.endswith(".json")])
 
     def setParameterOnBoard(self, parameterName, parameter):
-        typeDictionary = {
-            float : "f",
-            int : "i"
-        }
-        parameterDictionary = {
-            "AOO": 1,
-            "VOO": 2,
-            "AAI": 3,
-            "VVI": 4,
-        }
+
+
         toWrite = bytes()
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
-            toWrite += struct.pack("i", parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
-            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', parameterDictionary[parameter[0:3]]))}")
-            self.outputLength += len(struct.pack('i', parameterDictionary['VOO']))
+            toWrite += struct.pack("i", self.parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', self.parameterDictionary[parameter[0:3]]))}")
+            self.outputLength += len(struct.pack('i', self.parameterDictionary['VOO']))
         else:
-            toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
-            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
-            self.outputLength += len(struct.pack(typeDictionary[type(parameter)], parameter))
+            toWrite += struct.pack(self.typeDictionary[type(parameter)], parameter)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(self.typeDictionary[type(parameter)], parameter))}")
+            self.outputLength += len(struct.pack(self.typeDictionary[type(parameter)], parameter))
 
         return toWrite
 
 
-    def writeParamtersToBoard(self):
+    def writeParamtersToBoard(self, comport):
         status = []
-        outputParameters = [
-            "BradycardiaOperatingMode",
-            "LowerRateLimit",
-            "UpperRateLimit",
-            "AtrialAmplitude",
-            "AtrialPulseWidth",
-            "AtrialSensitivity",
-            "VentricularAmplitude",
-            "VentricularPulseWidth",
-            "VentricularSensitivity",
-            "VRP",
-            "ARP",
-            "MaxSensorRate",
-            "FixedAVdelay",
-            "DynamicAVdelay",
-            "AVdelayOffset",
-            "PVARP",
-            "PVARPextension",
-            "Hysteresis",
-            "RateSmoothing",
-            "ReactionTime",
-            "ResponseFactor",
-            "RecoveryTime",
-            "ATRmode",
-            "ATRtime",
-            "ATRduration"
-        ]
+
         Start = b'\x16'
-        SYNC = b'\x22'
         Fn_set = b'\x55'
 
-        #outputParameters = ["BradycardiaOperatingMode"]
-
         toWrite = Start + Fn_set
-        for name in outputParameters:
+        for name in self.outputParameters:
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
-        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
+        pacemaker = serial.Serial(comport, 115200, timeout=2)
         pacemaker.write(toWrite)
         pacemaker.close()
         return status, len(toWrite)
 
-    def echoParametersFromBoard(self):
+    def echoParametersFromBoard(self, comport):
         status = []
-        outputParameters = [
-            "BradycardiaOperatingMode",
-            "LowerRateLimit",
-            "UpperRateLimit",
-            "AtrialAmplitude",
-            "AtrialPulseWidth",
-            "AtrialSensitivity",
-            "VentricularAmplitude",
-            "VentricularPulseWidth",
-            "VentricularSensitivity",
-            "VRP",
-            "ARP",
-            "MaxSensorRate",
-            "FixedAVdelay",
-            "DynamicAVdelay",
-            "AVdelayOffset",
-            "PVARP",
-            "PVARPextension",
-            "Hysteresis",
-            "RateSmoothing",
-            "ReactionTime",
-            "ResponseFactor",
-            "RecoveryTime",
-            "ATRmode",
-            "ATRtime",
-            "ATRduration"
-        ]
+
         Start = b'\x16'
         SYNC = b'\x22'
-        Fn_set = b'\x55'
-
-        #outputParameters = ["BradycardiaOperatingMode"]
 
         toWrite = Start + SYNC
-        for name in outputParameters:
+        for name in self.outputParameters:
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
-        pacemaker = serial.Serial("COM4", 115200, timeout = 2)
+        pacemaker = serial.Serial(comport, 115200, timeout = 2)
         pacemaker.write(toWrite)
-        status = pacemaker.read(100)
+        status = pacemaker.read(104)
         pacemaker.close()
         values = []
         index = 0
-        typeDictionary = {
-            float : "f",
-            int : "i"
-        }
-        for attr in outputParameters:
+
+        for attr in self.outputParameters:
             if attr == "BradycardiaOperatingMode":
                 value = struct.unpack("i", status[index:index+4])[0]
                 index +=4
             else:
                 print(index, index+4)
-                value = struct.unpack(typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
-                index +=4
+                value = struct.unpack(self.typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
+                index += 4
             values.append((attr, value))
         print(values)
-        parameterDictionary = {
+        modeDictionary = {
             1 : "AOOO",
             2 : "VOOO",
             3 : "AAIO",
             4 : "VVIO"
         }
-        self.setBradycardiaOperatingMode(parameterDictionary[values[0][1]])
+        self.setBradycardiaOperatingMode(modeDictionary[values[0][1]])
         self.setLowerRateLimit(values[1][1])
         self.setUpperRateLimit(values[2][1])
         self.setAtrialAmplitude(values[3][1])
@@ -588,15 +559,15 @@ class user():
     def getActivityThreshold(self):
          return self.ActivityThreshold
 
-    def setActivityThreshold(self, ActivityThreshold: str):
+    def setActivityThreshold(self, ActivityThreshold: int):
         # V-Low, Low, Med-Low, Med, Med-High, High, V-High
         try:
-            ActivityThreshold = str(ActivityThreshold)
+            ActivityThreshold = int(ActivityThreshold)
         except:
-            raise TypeError("Activity threshold must be a string")
+            raise TypeError("Activity threshold must be a integer")
      
-        if ActivityThreshold != "V-Low" and ActivityThreshold != "Low" and ActivityThreshold != "Med-Low" and ActivityThreshold != "Med" and ActivityThreshold != "Med-High" and ActivityThreshold != "High" and ActivityThreshold != "V-High":
-            raise ValueError("Activity threshold does not match a given mode")
+        if ActivityThreshold in range(1,9):
+            raise ValueError("Activity threshold must be a integer between 1, 8")
         self.ActivityThreshold = ActivityThreshold
 
     def getATRmode(self):
