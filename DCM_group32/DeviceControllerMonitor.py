@@ -1,13 +1,15 @@
 import sys
 import os
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QLineEdit, QPushButton, QStackedWidget, \
-    QMainWindow, QDialog, QGridLayout
+    QMainWindow, QDialog, QGridLayout, QComboBox
 from PyQt5.uic import loadUi
 import PyQt5.QtCore as Qt
 import User.user as User
 import serial
 import struct
 import datetime
+import serial.tools.list_ports
+
 import pyqtgraph as pg
 
 WIDTH = 800
@@ -62,6 +64,8 @@ class loginScreen(QMainWindow):
 class DeviceControllerMonitor(QDialog):
     def __init__(self):
         super().__init__()
+        self.isCommunicating = False
+        self.serialNumber = 0
         loadUi(os.path.join("UI", "EditProperties Screen.ui"), self)
         self.setFixedSize(WIDTH, HEIGHT)
         self.saveAllButton.clicked.connect(self.saveToUser)
@@ -76,9 +80,17 @@ class DeviceControllerMonitor(QDialog):
         self.sensedComboBox.activated.connect(self.handleModeChange)
         self.responseComboBox.activated.connect(self.handleModeChange)
         self.rateModulationComboBox.activated.connect(self.handleModeChange)
+        self.comPortComboBox.activated.connect(self.handleModeChange)
         self.hideFields()
         self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
                                    + self.responseComboBox.currentText()[0]
+
+        self.ports = serial.tools.list_ports.comports()
+        for port in self.ports:
+            self.comPortComboBox.addItem(port[0])
+        self.comport = self.comPortComboBox.currentText()
+
+
 
     def hideFields(self):
         self.lowerRateLimitLabel.setHidden(True)
@@ -135,7 +147,7 @@ class DeviceControllerMonitor(QDialog):
 
     def setUser(self, user):
         self.user = user
-        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: [] Communicating: []")
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: {self.serialNumber} Communicating: {self.isCommunicating}")
         self.resetFields()
     def resetFields(self):
         self.lowerRateLimitField.setText(str(self.user.getLowerRateLimit()))
@@ -217,17 +229,25 @@ class DeviceControllerMonitor(QDialog):
             self.errorLabel.setText(f"Error Saving: {e}")
 
     def writeParametersToBoard(self):
+        self.isCommunicating = True
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: {self.serialNumber} Communicating: {self.isCommunicating}")
         try:
-            self.user.writeParamtersToBoard()
+            self.user.writeParamtersToBoard(self.comport)
         except Exception as e:
             self.errorLabel.setText(str(e))
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: {self.serialNumber} Communicating: {self.isCommunicating}")
+        self.isCommunicating = False
         
     def echoParametersFromBoard(self):
+        self.isCommunicating = True
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: {self.serialNumber} Communicating: {self.isCommunicating}")
         try:
-            self.user.echoParametersFromBoard()
+            self.user.echoParametersFromBoard(self.comport)
             self.resetFields()
         except Exception as e:
             self.errorLabel.setText(str(e))
+        self.label_9.setText(f"Current User: {self.user.username}  Pacemaker Serial Number: {self.serialNumber} Communicating: {self.isCommunicating}")
+        self.isCommunicating = False
 
     def logOut(self):
         self.user = None
@@ -238,6 +258,12 @@ class DeviceControllerMonitor(QDialog):
         self.errorLabel.setText("")
         self.tempBradycardiaMode = self.pacedComboBox.currentText()[0] + self.sensedComboBox.currentText()[0] \
                    + self.responseComboBox.currentText()[0] + self.rateModulationComboBox.currentText()[0]
+
+
+        self.ports = serial.tools.list_ports.comports()
+        for port in self.ports:
+            self.comPortComboBox.addItem(port[0])
+        self.comport = self.comPortComboBox.currentText()
 
         def showRateLimits():
             self.lowerRateLimitLabel.setHidden(False)
@@ -528,7 +554,23 @@ class DisplayEgram(QDialog):
         self.dataLineV = self.ventricleView.plot(self.ventricleX, self.ventricleY)
         self.ventricleView.setLabel("top", "Ventricle Plot")
 
+        self.comPortComboBox.activated.connect(self.handlePortChange)
 
+        self.ports = serial.tools.list_ports.comports()
+        for port in self.ports:
+            self.comPortComboBox.addItem(port[0])
+        self.comport = self.comPortComboBox.currentText()
+
+    def handlePortChange(self):
+
+        self.ports = serial.tools.list_ports.comports()
+        self.comPortComboBox = QComboBox()
+        #self.comPortComboBox.clear()
+        #for item in range(self.comPortComboBox.count()):
+        #    self.comPortComboBox.removeItem(item)
+        for port in self.ports:
+            self.comPortComboBox.addItem(port[0])
+        self.comport = self.comPortComboBox.currentText()
 
     def getOrStopData(self):
         if self.start:
@@ -557,23 +599,22 @@ class DisplayEgram(QDialog):
         Start = b'\x16'
         getData = b'\x77'
         toWrite = Start + getData
-        for i in range(25):
+        for i in range(26):
             toWrite += struct.pack("i", 0)
         tmsec = datetime.datetime.now()
-        pacemaker = serial.Serial("COM4", 115200, timeout=2)
+        pacemaker = serial.Serial(self.comport, 115200, timeout=2)
         pacemaker.write(toWrite)
-        status = pacemaker.read(100)
+        status = pacemaker.read(104)
         pacemaker.close()
 
         atrValue = struct.unpack("d", status[0:8])[0]
         venValue = struct.unpack("d", status[8:16])[0]
 
         delta = tmsec - self.startTime
-        
-        print(len(self.atriumX))
+
         if len(self.atriumX) > 150:
-            self.atriumX = self.atriumX[20:]
-            self.atriumY = self.atriumY[20:]
+            self.atriumX = self.atriumX[10:]
+            self.atriumY = self.atriumY[10:]
         self.atriumX.append(delta.total_seconds())
         self.atriumY.append(atrValue)
         self.atriumView.clear()
@@ -584,6 +625,7 @@ class DisplayEgram(QDialog):
             self.ventricleY = self.ventricleY[10:]
         self.ventricleX.append(delta.total_seconds())
         self.ventricleY.append(venValue)
+        self.ventricleView.clear()
         self.dataLineV = self.ventricleView.plot(self.ventricleX, self.ventricleY)
 
         self.count += 1
