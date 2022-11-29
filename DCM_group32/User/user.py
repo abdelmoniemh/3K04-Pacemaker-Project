@@ -103,10 +103,6 @@ class user():
             "ActivityThreshold"
         ]
 
-        self.typeDictionary = {
-            float : "f",
-            int : "i"
-        }
         self.parameterDictionary = {
             "AOO": 1,
             "VOO": 2,
@@ -140,16 +136,19 @@ class user():
 
     def setParameterOnBoard(self, parameterName, parameter):
 
-
+        typeDictionary = {
+            float: "f",
+            int: "i"
+        }
         toWrite = bytes()
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
             toWrite += struct.pack("i", self.parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
             print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', self.parameterDictionary[parameter[0:3]]))}")
             self.outputLength += len(struct.pack('i', self.parameterDictionary['VOO']))
         else:
-            toWrite += struct.pack(self.typeDictionary[type(parameter)], parameter)
-            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(self.typeDictionary[type(parameter)], parameter))}")
-            self.outputLength += len(struct.pack(self.typeDictionary[type(parameter)], parameter))
+            toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
+            self.outputLength += len(struct.pack(typeDictionary[type(parameter)], parameter))
 
         return toWrite
 
@@ -184,13 +183,17 @@ class user():
         values = []
         index = 0
 
+        typeDictionary = {
+            float: "f",
+            int: "i"
+        }
         for attr in self.outputParameters:
             if attr == "BradycardiaOperatingMode":
                 value = struct.unpack("i", status[index:index+4])[0]
                 index +=4
             else:
                 print(index, index+4)
-                value = struct.unpack(self.typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
+                value = struct.unpack(typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
                 index += 4
             values.append((attr, value))
         print(values)
