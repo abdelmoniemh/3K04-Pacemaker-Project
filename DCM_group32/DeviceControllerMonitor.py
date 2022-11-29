@@ -505,7 +505,7 @@ class DisplayEgram(QDialog):
 
         #Configure Timer to update graph
         self.timer = Qt.QTimer()
-        self.timer.setInterval(50)
+        self.timer.setInterval(1)
         self.timer.timeout.connect(self.getEgramData)
         self.count = 0
 
@@ -565,22 +565,26 @@ class DisplayEgram(QDialog):
         status = pacemaker.read(100)
         pacemaker.close()
 
-        atrValue = struct.unpack("d", status[0:4])[0]
+        atrValue = struct.unpack("d", status[0:8])[0]
         venValue = struct.unpack("d", status[8:16])[0]
 
+        delta = tmsec - self.startTime
+        
+        print(len(self.atriumX))
         if len(self.atriumX) > 150:
-            self.atriumX = self.atriumX[1:]
-            self.atriumY = self.atriumY[1:]
-        self.atriumX.append(tmsec - self.startTime)
+            self.atriumX = self.atriumX[20:]
+            self.atriumY = self.atriumY[20:]
+        self.atriumX.append(delta.total_seconds())
         self.atriumY.append(atrValue)
+        self.atriumView.clear()
         self.dataLineA = self.atriumView.plot(self.atriumX, self.atriumY)
 
         if len(self.ventricleX) > 150:
-            self.ventricleX = self.ventricleX[1:]
-            self.ventricleY = self.ventricleY[1:]
-        self.ventricleX.append(tmsec - self.startTime)
+            self.ventricleX = self.ventricleX[10:]
+            self.ventricleY = self.ventricleY[10:]
+        self.ventricleX.append(delta.total_seconds())
         self.ventricleY.append(venValue)
-        self.dataLineA = self.ventricleView.plot(self.ventricleX, self.ventricleY)
+        self.dataLineV = self.ventricleView.plot(self.ventricleX, self.ventricleY)
 
         self.count += 1
 
