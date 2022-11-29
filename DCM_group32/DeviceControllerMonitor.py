@@ -7,6 +7,7 @@ import PyQt5.QtCore as Qt
 import User.user as User
 import serial
 import struct
+import datetime
 import pyqtgraph as pg
 
 WIDTH = 800
@@ -217,7 +218,7 @@ class DeviceControllerMonitor(QDialog):
 
     def writeParametersToBoard(self):
         try:
-            self.user.writeParametersToBoard()
+            self.user.writeParamtersToBoard()
         except Exception as e:
             self.errorLabel.setText(str(e))
         
@@ -536,6 +537,7 @@ class DisplayEgram(QDialog):
         else:
             self.start = True
             self.timer.start()
+            self.startTime = datetime.datetime.now()
 
     def moveToDCM(self):
         self.start = False
@@ -551,27 +553,32 @@ class DisplayEgram(QDialog):
         self.count = 0
 
     def getEgramData(self):
-        #print("here")
 
         Start = b'\x16'
         getData = b'\x77'
         toWrite = Start + getData
         for i in range(25):
             toWrite += struct.pack("i", 0)
-
+        tmsec = datetime.datetime.now()
         pacemaker = serial.Serial("COM4", 115200, timeout=2)
         pacemaker.write(toWrite)
         status = pacemaker.read(100)
         pacemaker.close()
 
-        atrValue = struct.unpack("f", status[0:8])[0]
-        venValue = struct.unpack("f", status[8:16])[0]
+        atrValue = struct.unpack("d", status[0:4])[0]
+        venValue = struct.unpack("d", status[8:16])[0]
 
-        self.atriumX.append(self.count)
+        if len(self.atriumX) > 150:
+            self.atriumX = self.atriumX[1:]
+            self.atriumY = self.atriumY[1:]
+        self.atriumX.append(tmsec - self.startTime)
         self.atriumY.append(atrValue)
         self.dataLineA = self.atriumView.plot(self.atriumX, self.atriumY)
 
-        self.ventricleX.append(self.count)
+        if len(self.ventricleX) > 150:
+            self.ventricleX = self.ventricleX[1:]
+            self.ventricleY = self.ventricleY[1:]
+        self.ventricleX.append(tmsec - self.startTime)
         self.ventricleY.append(venValue)
         self.dataLineA = self.ventricleView.plot(self.ventricleX, self.ventricleY)
 

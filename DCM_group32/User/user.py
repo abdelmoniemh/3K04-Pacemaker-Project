@@ -6,6 +6,7 @@ import serial
 import struct
 import numpy as np
 import datetime
+import copy
 
 #if on linux or macos make sure "TMPDIR" env variable is set
 #os.environ["TMPDIR"] = "/home/tempdir" #for linux
@@ -76,7 +77,8 @@ class user():
     def serialize(self):
         # store user data in txt files in directory/db
         toBeSerialized = dict()
-        self.previousVerisons.append((datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"), self.__dict__))
+        prev = copy.deepcopy(self.__dict__)
+        self.previousVerisons.append((datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"), prev))
         for attr, value in self.__dict__.items():
             toBeSerialized[attr] = value
 
