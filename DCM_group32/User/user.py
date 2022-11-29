@@ -177,7 +177,7 @@ class user():
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
         pacemaker = serial.Serial(comport, 115200, timeout = 2)
         pacemaker.write(toWrite)
-        status = pacemaker.read(104)
+        status = pacemaker.read(100)
         pacemaker.close()
         values = []
         index = 0
