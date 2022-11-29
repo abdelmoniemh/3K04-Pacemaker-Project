@@ -99,14 +99,9 @@ class user():
             "RecoveryTime",
             "ATRmode",
             "ATRtime",
-            "ATRduration",
-            "ActivityThreshold"
+            "ATRduration"
         ]
 
-        self.typeDictionary = {
-            float : "f",
-            int : "i"
-        }
         self.parameterDictionary = {
             "AOO": 1,
             "VOO": 2,
@@ -140,16 +135,19 @@ class user():
 
     def setParameterOnBoard(self, parameterName, parameter):
 
-
+        typeDictionary = {
+            float: "f",
+            int: "i"
+        }
         toWrite = bytes()
         if type(parameter) == str and parameterName == "BradycardiaOperatingMode":
             toWrite += struct.pack("i", self.parameterDictionary[parameter[0:3]]) #struct.pack("i", parameterDictionary[parameterName])
             print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack('i', self.parameterDictionary[parameter[0:3]]))}")
             self.outputLength += len(struct.pack('i', self.parameterDictionary['VOO']))
         else:
-            toWrite += struct.pack(self.typeDictionary[type(parameter)], parameter)
-            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(self.typeDictionary[type(parameter)], parameter))}")
-            self.outputLength += len(struct.pack(self.typeDictionary[type(parameter)], parameter))
+            toWrite += struct.pack(typeDictionary[type(parameter)], parameter)
+            print(f"parameterName = {parameterName}, {toWrite}, len = {len(struct.pack(typeDictionary[type(parameter)], parameter))}")
+            self.outputLength += len(struct.pack(typeDictionary[type(parameter)], parameter))
 
         return toWrite
 
@@ -179,18 +177,22 @@ class user():
             toWrite += self.setParameterOnBoard(name, self.__dict__[name])
         pacemaker = serial.Serial(comport, 115200, timeout = 2)
         pacemaker.write(toWrite)
-        status = pacemaker.read(104)
+        status = pacemaker.read(100)
         pacemaker.close()
         values = []
         index = 0
 
+        typeDictionary = {
+            float: "f",
+            int: "i"
+        }
         for attr in self.outputParameters:
             if attr == "BradycardiaOperatingMode":
                 value = struct.unpack("i", status[index:index+4])[0]
                 index +=4
             else:
                 print(index, index+4)
-                value = struct.unpack(self.typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
+                value = struct.unpack(typeDictionary[type(self.__dict__[attr])], status[index:index+4])[0]
                 index += 4
             values.append((attr, value))
         print(values)
@@ -566,7 +568,7 @@ class user():
         except:
             raise TypeError("Activity threshold must be a integer")
      
-        if ActivityThreshold in range(1,9):
+        if not ActivityThreshold in range(1,9):
             raise ValueError("Activity threshold must be a integer between 1, 8")
         self.ActivityThreshold = ActivityThreshold
 
