@@ -569,7 +569,7 @@ class user():
         except:
             raise TypeError("Activity threshold must be a integer")
      
-        if ActivityThreshold in range(1,9):
+        if not ActivityThreshold in range(1,9):
             raise ValueError("Activity threshold must be a integer between 1, 8")
         self.ActivityThreshold = ActivityThreshold
 
